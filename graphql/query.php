@@ -24,14 +24,14 @@ class query extends ObjectType
 				'forum'	=> [
 					'type'	=> types::forum(),
 					'args'	=> [
-						'id'	=> types::nonNull(types::id()),
+						'forum_id'	=> types::nonNull(types::id()),
 					],
 					'resolve'	=> function($db, $args, $context, ResolveInfo $info) {
 						$fields = array_keys($info->getFieldSelection());
 
 						$sql = 'SELECT ' . implode(',', $fields) . '
 							FROM ' . FORUMS_TABLE . '
-							WHERE forum_id = ' . (int) $args['id'];
+							WHERE forum_id = ' . (int) $args['forum_id'];
 						$result = $db->sql_query($sql);
 						$row = $db->sql_fetchrow($result);
 						$db->sql_freeresult($result);
