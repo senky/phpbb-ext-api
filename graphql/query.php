@@ -40,11 +40,20 @@ class query extends ObjectType
 				],
 				'forums'	=> [
 					'type'	=> types::listOf(types::forum()),
+					'args'	=> [
+						'forum_ids'	=> types::listOf(types::id()),
+					],
 					'resolve'	=> function($db, $args, $context, ResolveInfo $info) {
 						$fields = array_keys($info->getFieldSelection());
 
 						$sql = 'SELECT ' . implode(',', $fields) . '
 							FROM ' . FORUMS_TABLE;
+
+						if (!empty($args['forum_ids']))
+						{
+							$sql .= ' WHERE ' . $db->sql_in_set('forum_id', $args['forum_ids']);
+						}
+
 						$result = $db->sql_query($sql);
 						$rows = $db->sql_fetchrowset($result);
 						$db->sql_freeresult($result);
