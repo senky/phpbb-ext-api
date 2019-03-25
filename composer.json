@@ -1,0 +1,27 @@
+{
+    "name": "senky/api",
+    "type": "phpbb-extension",
+    "description": "Exposes session-based frontend API.",
+    "version": "1.0.0",
+    "license": "GPL-2.0-only",
+    "authors": [
+        {
+            "name": "Jakub Senko",
+            "email": "jakubsenko@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4",
+        "composer/installers": "~1.0",
+        "webonyx/graphql-php": "^0.13.1"
+    },
+    "extra": {
+        "display-name": "phpBB API",
+        "soft-require": {
+            "phpbb/phpbb": ">=3.2.0,<3.3.0@dev"
+        }
+    },
+    "require-dev": {
+        "phing/phing": "2.4.*"
+    }
+}

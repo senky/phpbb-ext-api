@@ -1,0 +1,16 @@
+services:
+    senky.api.controller.main:
+        class: senky\api\controller\main_controller
+        arguments:
+            - '@request'
+            - '@dbal.conn'
+
+    senky.api.listener:
+        class: senky\api\event\main_listener
+        arguments:
+            - '@controller.helper'
+            - '@template'
+            - '@language'
+            - '%core.php_ext%'
+        tags:
+            - { name: event.listener }

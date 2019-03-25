@@ -1,0 +1,4 @@
+senky_api_controller:
+    path: /api/v0
+    defaults: { _controller: senky.api.controller.main:handle }
+    #methods: POST
