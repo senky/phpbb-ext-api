@@ -60,6 +60,50 @@ class query extends ObjectType
 						return $rows;
 					},
 				],
+				'topic'	=> [
+					'type'	=> types::topic(),
+					'args'	=> [
+						'topic_id'	=> types::id(),
+					],
+					'resolve'	=> function($db, $args, $context, ResolveInfo $info) {
+						$fields = $info->getFieldSelection();
+
+						// forum is special field, we can't fetch it directly
+						if (isset($fields['forum']))
+						{
+							$fetch_forum = true;
+							unset($fields['forum']);
+						}
+
+						// we need forum_id if user requested forum data
+						if ($fetch_forum && empty($fields['forum_od']))
+						{
+							$fields['forum_id'] = true;
+						}
+
+						$sql = 'SELECT ' . implode(',', array_keys($fields)) . '
+							FROM ' . TOPICS_TABLE . '
+							WHERE topic_id = ' . (int) $args['topic_id'];
+						$result = $db->sql_query($sql);
+						$row = $db->sql_fetchrow($result);
+						$db->sql_freeresult($result);
+
+						if ($fetch_forum)
+						{
+							$fields = $info->getFieldSelection(1);
+							$fields = array_keys($fields['forum']);
+
+							$sql = 'SELECT ' . implode(',', $fields) . '
+								FROM ' . FORUMS_TABLE . '
+								WHERE forum_id = ' . (int) $row['forum_id'];
+							$result = $db->sql_query($sql);
+							$row['forum'] = $db->sql_fetchrow($result);
+							$db->sql_freeresult($result);
+						}
+
+						return $row;
+					},
+				],
 			],
 		];
 		parent::__construct($config);
