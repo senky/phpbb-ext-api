@@ -10,7 +10,6 @@
 
 namespace senky\api\graphql\type;
 
-use senky\api\graphql\buffer\forum_buffer;
 use senky\api\graphql\types;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
