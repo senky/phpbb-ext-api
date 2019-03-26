@@ -55,23 +55,13 @@ class post_type extends ObjectType
 				'topic'	=> [
 					'type'	=> types::topic(),
 					'resolve'	=> function($row, $args, $context, ResolveInfo $info) {
-						$fields = $context->clean_fields($info->getFieldSelection());
-						$context->topic_buffer->add($row['topic_id'], $fields);
-
-						return new \GraphQL\Deferred(function() use ($row, $context) {
-							return $context->topic_buffer->get($row['topic_id']);
-						});
+						return $context->resolver->resolve($row, $args, $context, $info);
 					},
 				],
 				'forum'	=> [
 					'type'	=> types::forum(),
 					'resolve'	=> function($row, $args, $context, ResolveInfo $info) {
-						$fields = $context->clean_fields($info->getFieldSelection());
-						$context->forum_buffer->add($row['forum_id'], $fields);
-
-						return new \GraphQL\Deferred(function() use ($row, $context) {
-							return $context->forum_buffer->get($row['forum_id']);
-						});
+						return $context->resolver->resolve($row, $args, $context, $info);
 					},
 				],
 			],

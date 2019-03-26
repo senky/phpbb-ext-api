@@ -64,12 +64,7 @@ class topic_type extends ObjectType
 				'forum'	=> [
 					'type'	=> types::forum(),
 					'resolve'	=> function($row, $args, $context, ResolveInfo $info) {
-						$fields = $context->clean_fields($info->getFieldSelection());
-						$context->forum_buffer->add($row['forum_id'], $fields);
-
-						return new \GraphQL\Deferred(function() use ($row, $context) {
-							return $context->forum_buffer->get($row['forum_id']);
-						});
+						return $context->resolver->resolve($row, $args, $context, $info);
 					},
 				],
 			],

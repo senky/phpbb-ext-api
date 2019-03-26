@@ -7,6 +7,7 @@ services:
         arguments:
             - '@request'
             - '@senky.api.graphql.context'
+            - '@senky.api.graphql.resolver'
 
     senky.api.listener:
         class: senky\api\event\main_listener
