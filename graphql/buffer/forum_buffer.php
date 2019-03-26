@@ -17,9 +17,11 @@ class forum_buffer
 	protected $result = [];
 
 	protected $db;
-	public function __construct(\phpbb\db\driver\driver_interface $db)
+	protected $forums_table;
+	public function __construct(\phpbb\db\driver\driver_interface $db, $forums_table)
 	{
 		$this->db = $db;
+		$this->forums_table = $forums_table;
 	}
 
 	public function add($forum_id, $fields = [])
@@ -58,7 +60,7 @@ class forum_buffer
 		if (empty($this->result))
 		{
 			$sql = 'SELECT forum_id, ' . implode(',', $this->fields) . '
-				FROM ' . FORUMS_TABLE;
+				FROM ' . $this->forums_table;
 			
 			if (!empty($this->forum_ids))
 			{
