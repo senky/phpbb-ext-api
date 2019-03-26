@@ -21,4 +21,9 @@ class user_buffer extends buffer
 	{
 		return 'user_id';
 	}
+
+	protected function get_entity_permission()
+	{
+		return 'u_viewprofile';
+	}
 }

@@ -26,4 +26,9 @@ class topic_buffer extends buffer
 	{
 		return 'topic_id, forum_id';
 	}
+
+	protected function get_entity_permission()
+	{
+		return 'f_list_topics';
+	}
 }

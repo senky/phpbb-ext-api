@@ -26,4 +26,9 @@ class post_buffer extends buffer
 	{
 		return 'post_id, topic_id, forum_id';
 	}
+
+	protected function get_entity_permission()
+	{
+		return 'f_read';
+	}
 }

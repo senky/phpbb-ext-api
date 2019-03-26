@@ -21,4 +21,9 @@ class forum_buffer extends buffer
 	{
 		return 'forum_id';
 	}
+
+	protected function get_entity_permission()
+	{
+		return 'f_list';
+	}
 }

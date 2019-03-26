@@ -16,22 +16,26 @@ services:
         class: senky\api\graphql\buffer\forum_buffer
         arguments:
             - '@dbal.conn'
+            - '@auth'
             - '%tables.forums%'
 
     senky.api.graphql.buffer.post_buffer:
         class: senky\api\graphql\buffer\post_buffer
         arguments:
             - '@dbal.conn'
+            - '@auth'
             - '%tables.posts%'
 
     senky.api.graphql.buffer.topic_buffer:
         class: senky\api\graphql\buffer\topic_buffer
         arguments:
             - '@dbal.conn'
+            - '@auth'
             - '%tables.topics%'
 
     senky.api.graphql.buffer.user_buffer:
         class: senky\api\graphql\buffer\user_buffer
         arguments:
             - '@dbal.conn'
+            - '@auth'
             - '%tables.users%'

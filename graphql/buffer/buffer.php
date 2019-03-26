@@ -18,10 +18,12 @@ abstract class buffer
 	protected $result = [];
 
 	protected $db;
+	protected $auth;
 	protected $table;
-	public function __construct(\phpbb\db\driver\driver_interface $db, $table)
+	public function __construct(\phpbb\db\driver\driver_interface $db, \phpbb\auth\auth $auth, $table)
 	{
 		$this->db = $db;
+		$this->auth = $auth;
 		$this->table = $table;
 	}
 
@@ -92,6 +94,14 @@ abstract class buffer
 			$result = $this->db->sql_query($sql);
 			while ($row = $this->db->sql_fetchrow($result))
 			{
+				if (
+					(!empty($row['forum_id']) && !$this->auth->acl_get($this->get_entity_permission(), $row['forum_id']))
+					||
+					(empty($row['forum_id'] && !$this->auth->acl_get($this->get_entity_permission())))
+				)
+				{
+					continue;
+				}
 				$this->result[$row[$this->get_entity_name()]] = $row;
 			}
 			$this->db->sql_freeresult($result);
@@ -104,4 +114,5 @@ abstract class buffer
 
 	protected abstract function get_entity_name();
 	protected abstract function get_entity_fields();
+	protected abstract function get_entity_permission();
 }
