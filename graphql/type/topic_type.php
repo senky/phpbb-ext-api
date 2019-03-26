@@ -10,8 +10,9 @@
 
 namespace senky\api\graphql\type;
 
-use GraphQL\Type\Definition\ObjectType;
+use senky\api\graphql\buffer\forum_buffer;
 use senky\api\graphql\types;
+use GraphQL\Type\Definition\ObjectType;
 
 class topic_type extends ObjectType
 {
@@ -56,7 +57,15 @@ class topic_type extends ObjectType
 				'poll_vote_change'			=> types::boolean(),
 
 				// additional fields
-				'forum'	=> types::forum(),
+				'forum'	=> [
+					'type'	=> types::forum(),
+					'resolve'	=> function($row) {
+						forum_buffer::add($row['forum_id']);
+						return new \GraphQL\Deferred(function() use ($row) {
+							return forum_buffer::get($row['forum_id']);
+						});
+					},
+				],
 			],
 		];
 		parent::__construct($config);

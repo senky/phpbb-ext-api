@@ -137,30 +137,6 @@ class query extends ObjectType
 						$rows = $db->sql_fetchrowset($result);
 						$db->sql_freeresult($result);
 
-						if ($fetch_forum)
-						{
-							$fields = $info->getFieldSelection(1);
-							$fields = array_keys($fields['forum']);
-
-							$forum_ids = array_column($rows, 'forum_id');
-
-							$sql = 'SELECT forum_id, ' . implode(',', $fields) . '
-								FROM ' . FORUMS_TABLE . '
-								WHERE ' . $db->sql_in_set('forum_id', $forum_ids);
-							$result = $db->sql_query($sql);
-							$forum_rows = [];
-							while ($row = $db->sql_fetchrow($result))
-							{
-								$forum_rows[$row['forum_id']] = $row;
-							}
-							$db->sql_freeresult($result);
-
-							foreach ($rows as &$row)
-							{
-								$row['forum'] = $forum_rows[$row['forum_id']];
-							}
-						}
-
 						return $rows;
 					},
 				],
