@@ -13,6 +13,7 @@ namespace senky\api\graphql\type;
 use senky\api\graphql\buffer\forum_buffer;
 use senky\api\graphql\types;
 use GraphQL\Type\Definition\ObjectType;
+use GraphQL\Type\Definition\ResolveInfo;
 
 class topic_type extends ObjectType
 {
@@ -59,8 +60,10 @@ class topic_type extends ObjectType
 				// additional fields
 				'forum'	=> [
 					'type'	=> types::forum(),
-					'resolve'	=> function($row) {
-						forum_buffer::add($row['forum_id']);
+					'resolve'	=> function($row, $args, $context, ResolveInfo $info) {
+						$fields = array_keys($info->getFieldSelection());
+						forum_buffer::add($row['forum_id'], $fields);
+
 						return new \GraphQL\Deferred(function() use ($row) {
 							return forum_buffer::get($row['forum_id']);
 						});

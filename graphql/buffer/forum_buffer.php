@@ -13,13 +13,17 @@ namespace senky\api\graphql\buffer;
 class forum_buffer
 {
 	protected static $forum_ids = [];
+	protected static $fields = [];
 	protected static $result = [];
-	public static function add($forum_id)
+	public static function add($forum_id, $fields)
 	{
 		if (!in_array($forum_id, self::$forum_ids))
 		{
 			// add new forum
 			self::$forum_ids[] = $forum_id;
+
+			// union of fields
+			self::$fields += $fields;
 
 			// reset results
 			self::$result = [];
@@ -32,7 +36,7 @@ class forum_buffer
 
 		if (empty(self::$result))
 		{
-			$sql = 'SELECT *
+			$sql = 'SELECT forum_id, ' . implode(',', self::$fields) . '
 				FROM ' . FORUMS_TABLE . '
 				WHERE ' . $db->sql_in_set('forum_id', self::$forum_ids);
 			$result = $db->sql_query($sql);
@@ -41,6 +45,9 @@ class forum_buffer
 				self::$result[$row['forum_id']] = $row;
 			}
 			$db->sql_freeresult($result);
+
+			// reset fields - next query won't fetch unnecessary fields this way
+			self::$fields = [];
 		}
 
 		return self::$result[$forum_id];
