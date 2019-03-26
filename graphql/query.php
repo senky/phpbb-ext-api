@@ -129,6 +129,42 @@ class query extends ObjectType
 						});
 					},
 				],
+				'user'	=> [
+					'type'	=> types::user(),
+					'args'	=> [
+						'user_id'	=> types::id(),
+					],
+					'resolve'	=> function($_, $args, $context, ResolveInfo $info) {
+						$fields = $context->clean_fields($info->getFieldSelection());
+						$context->user_buffer->add($args['user_id'], $fields);
+
+						return new \GraphQL\Deferred(function() use ($args, $context) {
+							return $context->user_buffer->get($args['user_id']);
+						});
+					},
+				],
+				'users'	=> [
+					'type'	=> types::listOf(types::user()),
+					'args'	=> [
+						'user_ids'	=> types::listOf(types::id()),
+					],
+					'resolve'	=> function($_, $args, $context, ResolveInfo $info) {
+						$fields = $context->clean_fields($info->getFieldSelection());
+						$context->user_buffer->add_fields($fields);
+
+						if (!empty($args['user_ids']))
+						{
+							foreach ($args['user_ids'] as $user_id)
+							{
+								$context->user_buffer->add($user_id);
+							}
+						}
+
+						return new \GraphQL\Deferred(function() use ($context) {
+							return $context->user_buffer->get_all();
+						});
+					},
+				],
 			],
 		];
 		parent::__construct($config);
