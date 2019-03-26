@@ -52,6 +52,12 @@ class post_type extends ObjectType
 				'post_delete_user'		=> types::id(),
 
 				// additional fields
+				'post_html'	=> [
+					'type'	=> types::string(),
+					'resolve'	=> function($row, $args, $context, ResolveInfo $info) {
+						return generate_text_for_display($row['post_text'], $row['bbcode_uid'], $row['bbcode_bitfield'], ($row['bbcode_bitfield'] ? OPTION_FLAG_BBCODE : 0) | OPTION_FLAG_SMILIES);
+					},
+				],
 				'topic'	=> [
 					'type'	=> types::topic(),
 					'resolve'	=> function($row, $args, $context, ResolveInfo $info) {

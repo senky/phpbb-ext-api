@@ -71,7 +71,8 @@ abstract class buffer
 		if (empty($this->result))
 		{
 			$where = [];
-			$sql = 'SELECT ' . $this->get_entity_fields() . ', ' . implode(',', $this->fields) . '
+			$fields = implode(',', $this->fields);
+			$sql = 'SELECT ' . $this->get_entity_fields() . ($fields ? ',' . $fields : '') . '
 				FROM ' . $this->table;
 			
 			if (!empty($this->entity_ids))

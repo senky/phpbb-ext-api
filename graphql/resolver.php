@@ -40,7 +40,11 @@ class resolver
 
 	protected function resolve_multiple($type, $args, $context, ResolveInfo $info)
 	{
-		$fields = $this->clean_fields($info->getFieldSelection());
+		$fields = $info->getFieldSelection();
+		$additional_fields = $this->get_additional_fields($fields);
+		$fields = $this->clean_fields($fields);
+		$fields += $additional_fields;
+
 		$context->{$type . '_buffer'}->add_fields($fields);
 
 		// maybe user specified IDs
@@ -66,7 +70,17 @@ class resolver
 
 	protected static function clean_fields($fields)
 	{
-		unset($fields['forum'], $fields['topic']);
+		unset($fields['forum'], $fields['topic'], $fields['post_html']);
 		return array_keys($fields);
+	}
+
+	protected static function get_additional_fields($fields)
+	{
+		$additional_fields = [];
+		if (isset($fields['post_html']))
+		{
+			$additional_fields = ['post_text', 'bbcode_uid', 'bbcode_bitfield'];
+		}
+		return $additional_fields;
 	}
 }
