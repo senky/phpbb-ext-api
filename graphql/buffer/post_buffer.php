@@ -59,7 +59,7 @@ class post_buffer
 	{
 		if (empty($this->result))
 		{
-			$sql = 'SELECT post_id, ' . implode(',', $this->fields) . '
+			$sql = 'SELECT post_id, topic_id, forum_id, ' . implode(',', $this->fields) . '
 				FROM ' . $this->posts_table;
 			
 			if (!empty($this->post_ids))

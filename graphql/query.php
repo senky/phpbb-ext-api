@@ -27,7 +27,7 @@ class query extends ObjectType
 						'forum_id'	=> types::nonNull(types::id()),
 					],
 					'resolve'	=> function($_, $args, $context, ResolveInfo $info) {
-						$fields = array_keys($info->getFieldSelection());
+						$fields = $context->clean_fields($info->getFieldSelection());
 						$context->forum_buffer->add($args['forum_id'], $fields);
 
 						return new \GraphQL\Deferred(function() use ($args, $context) {
@@ -41,7 +41,7 @@ class query extends ObjectType
 						'forum_ids'	=> types::listOf(types::id()),
 					],
 					'resolve'	=> function($_, $args, $context, ResolveInfo $info) {
-						$fields = array_keys($info->getFieldSelection());
+						$fields = $context->clean_fields($info->getFieldSelection());
 						$context->forum_buffer->add_fields($fields);
 
 						if (!empty($args['forum_ids']))
@@ -63,7 +63,7 @@ class query extends ObjectType
 						'topic_id'	=> types::id(),
 					],
 					'resolve'	=> function($_, $args, $context, ResolveInfo $info) {
-						$fields = array_keys($info->getFieldSelection());
+						$fields = $context->clean_fields($info->getFieldSelection());
 						$context->topic_buffer->add($args['topic_id'], $fields);
 
 						return new \GraphQL\Deferred(function() use ($args, $context) {
@@ -77,7 +77,7 @@ class query extends ObjectType
 						'topic_ids'	=> types::listOf(types::id()),
 					],
 					'resolve'	=> function($_, $args, $context, ResolveInfo $info) {
-						$fields = array_keys($info->getFieldSelection());
+						$fields = $context->clean_fields($info->getFieldSelection());
 						$context->topic_buffer->add_fields($fields);
 
 						if (!empty($args['topic_ids']))
@@ -99,11 +99,33 @@ class query extends ObjectType
 						'post_id'	=> types::id(),
 					],
 					'resolve'	=> function($_, $args, $context, ResolveInfo $info) {
-						$fields = array_keys($info->getFieldSelection());
+						$fields = $context->clean_fields($info->getFieldSelection());
 						$context->post_buffer->add($args['post_id'], $fields);
 
 						return new \GraphQL\Deferred(function() use ($args, $context) {
 							return $context->post_buffer->get($args['post_id']);
+						});
+					},
+				],
+				'posts'	=> [
+					'type'	=> types::listOf(types::post()),
+					'args'	=> [
+						'post_ids'	=> types::listOf(types::id()),
+					],
+					'resolve'	=> function($_, $args, $context, ResolveInfo $info) {
+						$fields = $context->clean_fields($info->getFieldSelection());
+						$context->post_buffer->add_fields($fields);
+
+						if (!empty($args['post_ids']))
+						{
+							foreach ($args['post_ids'] as $post_id)
+							{
+								$context->post_buffer->add($post_id);
+							}
+						}
+
+						return new \GraphQL\Deferred(function() use ($context) {
+							return $context->post_buffer->get_all();
 						});
 					},
 				],

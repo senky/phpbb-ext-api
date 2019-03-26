@@ -59,7 +59,7 @@ class topic_buffer
 	{
 		if (empty($this->result))
 		{
-			$sql = 'SELECT topic_id, ' . implode(',', $this->fields) . '
+			$sql = 'SELECT topic_id, forum_id, ' . implode(',', $this->fields) . '
 				FROM ' . $this->topics_table;
 			
 			if (!empty($this->topic_ids))

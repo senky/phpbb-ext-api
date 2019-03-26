@@ -23,4 +23,10 @@ class context
 		$this->post_buffer = $post_buffer;
 		$this->topic_buffer = $topic_buffer;
 	}
+
+	public static function clean_fields($fields)
+	{
+		unset($fields['forum'], $fields['topic']);
+		return array_keys($fields);
+	}
 }
