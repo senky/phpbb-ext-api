@@ -20,11 +20,11 @@ use GraphQL\Server\StandardServer;
 class main_controller
 {
 	protected $request;
-	protected $db;
-	public function __construct(\phpbb\request\request $request, \phpbb\db\driver\driver_interface $db)
+	protected $context;
+	public function __construct(\phpbb\request\request $request, \senky\api\graphql\context $context)
 	{
 		$this->request = $request;
-		$this->db = $db;
+		$this->context = $context;
 	}
 
 	public function handle()
@@ -32,7 +32,7 @@ class main_controller
 		$this->request->enable_super_globals();
 		$server = new StandardServer([
 			'schema'	=> new Schema(['query' => new query()]),
-			'rootValue'	=> $this->db,
+			'context'	=> $this->context,
 			'debug'		=> Debug::INCLUDE_DEBUG_MESSAGE | Debug::INCLUDE_TRACE,
 		]);
 		$server->handleRequest();

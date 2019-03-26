@@ -12,44 +12,49 @@ namespace senky\api\graphql\buffer;
 
 class forum_buffer
 {
-	protected static $forum_ids = [];
-	protected static $fields = [];
-	protected static $result = [];
-	public static function add($forum_id, $fields)
+	protected $forum_ids = [];
+	protected $fields = [];
+	protected $result = [];
+
+	protected $db;
+	public function __construct(\phpbb\db\driver\driver_interface $db)
 	{
-		if (!in_array($forum_id, self::$forum_ids))
+		$this->db = $db;
+	}
+
+	public function add($forum_id, $fields)
+	{
+		if (!in_array($forum_id, $this->forum_ids))
 		{
 			// add new forum
-			self::$forum_ids[] = $forum_id;
+			$this->forum_ids[] = $forum_id;
 
 			// union of fields
-			self::$fields += $fields;
+			$this->fields += $fields;
 
 			// reset results
-			self::$result = [];
+			$this->result = [];
 		}
 	}
 
-	public static function get($forum_id)
+	public function get($forum_id)
 	{
-		global $db;
-
-		if (empty(self::$result))
+		if (empty($this->result))
 		{
-			$sql = 'SELECT forum_id, ' . implode(',', self::$fields) . '
+			$sql = 'SELECT forum_id, ' . implode(',', $this->fields) . '
 				FROM ' . FORUMS_TABLE . '
-				WHERE ' . $db->sql_in_set('forum_id', self::$forum_ids);
-			$result = $db->sql_query($sql);
-			while ($row = $db->sql_fetchrow($result))
+				WHERE ' . $this->db->sql_in_set('forum_id', $this->forum_ids);
+			$result = $this->db->sql_query($sql);
+			while ($row = $this->db->sql_fetchrow($result))
 			{
-				self::$result[$row['forum_id']] = $row;
+				$this->result[$row['forum_id']] = $row;
 			}
-			$db->sql_freeresult($result);
+			$this->db->sql_freeresult($result);
 
 			// reset fields - next query won't fetch unnecessary fields this way
-			self::$fields = [];
+			$this->fields = [];
 		}
 
-		return self::$result[$forum_id];
+		return $this->result[$forum_id];
 	}
 }

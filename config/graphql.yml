@@ -1,0 +1,11 @@
+services:
+    senky.api.graphql.context:
+        class: senky\api\graphql\context
+        arguments:
+            - '@dbal.conn'
+            - '@senky.api.graphql.buffer.forum_buffer'
+
+    senky.api.graphql.buffer.forum_buffer:
+        class: senky\api\graphql\buffer\forum_buffer
+        arguments:
+            - '@dbal.conn'

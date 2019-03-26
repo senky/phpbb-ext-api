@@ -62,10 +62,10 @@ class topic_type extends ObjectType
 					'type'	=> types::forum(),
 					'resolve'	=> function($row, $args, $context, ResolveInfo $info) {
 						$fields = array_keys($info->getFieldSelection());
-						forum_buffer::add($row['forum_id'], $fields);
+						$context->forum_buffer->add($row['forum_id'], $fields);
 
-						return new \GraphQL\Deferred(function() use ($row) {
-							return forum_buffer::get($row['forum_id']);
+						return new \GraphQL\Deferred(function() use ($row, $context) {
+							return $context->forum_buffer->get($row['forum_id']);
 						});
 					},
 				],
