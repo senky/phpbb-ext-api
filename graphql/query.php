@@ -63,29 +63,12 @@ class query extends ObjectType
 						'topic_id'	=> types::id(),
 					],
 					'resolve'	=> function($_, $args, $context, ResolveInfo $info) {
-						$fields = $info->getFieldSelection();
+						$fields = array_keys($info->getFieldSelection());
+						$context->topic_buffer->add($args['topic_id'], $fields);
 
-						// forum is special field, we can't fetch it directly
-						if (isset($fields['forum']))
-						{
-							$fetch_forum = true;
-							unset($fields['forum']);
-						}
-
-						// we need forum_id if user requested forum data
-						if ($fetch_forum && empty($fields['forum_id']))
-						{
-							$fields['forum_id'] = true;
-						}
-
-						$sql = 'SELECT ' . implode(',', array_keys($fields)) . '
-							FROM ' . TOPICS_TABLE . '
-							WHERE topic_id = ' . (int) $args['topic_id'];
-						$result = $context->db->sql_query($sql);
-						$row = $context->db->sql_fetchrow($result);
-						$context->db->sql_freeresult($result);
-
-						return $row;
+						return new \GraphQL\Deferred(function() use ($args, $context) {
+							return $context->topic_buffer->get($args['topic_id']);
+						});
 					},
 				],
 				'topics'	=> [
@@ -94,34 +77,20 @@ class query extends ObjectType
 						'topic_ids'	=> types::listOf(types::id()),
 					],
 					'resolve'	=> function($_, $args, $context, ResolveInfo $info) {
-						$fields = $info->getFieldSelection();
-
-						// forum is special field, we can't fetch it directly
-						if (isset($fields['forum']))
-						{
-							$fetch_forum = true;
-							unset($fields['forum']);
-						}
-
-						// we need forum_id if user requested forum data
-						if ($fetch_forum && empty($fields['forum_id']))
-						{
-							$fields['forum_id'] = true;
-						}
-
-						$sql = 'SELECT ' . implode(',', array_keys($fields)) . '
-							FROM ' . TOPICS_TABLE;
+						$fields = array_keys($info->getFieldSelection());
+						$context->topic_buffer->add_fields($fields);
 
 						if (!empty($args['topic_ids']))
 						{
-							$sql .= ' WHERE ' . $context->db->sql_in_set('topic_id', $args['topic_ids']);
+							foreach ($args['topic_ids'] as $topic_id)
+							{
+								$context->topic_buffer->add($topic_id);
+							}
 						}
 
-						$result = $context->db->sql_query($sql);
-						$rows = $context->db->sql_fetchrowset($result);
-						$context->db->sql_freeresult($result);
-
-						return $rows;
+						return new \GraphQL\Deferred(function() use ($context) {
+							return $context->topic_buffer->get_all();
+						});
 					},
 				],
 			],
