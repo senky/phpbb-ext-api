@@ -43,12 +43,20 @@ class resolver
 		$fields = $this->clean_fields($info->getFieldSelection());
 		$context->{$type . '_buffer'}->add_fields($fields);
 
+		// maybe user specified IDs
 		if (!empty($args[$type . '_ids']))
 		{
 			foreach ($args[$type . '_ids'] as $user_id)
 			{
 				$context->{$type . '_buffer'}->add($user_id);
 			}
+		}
+
+		// or maybe user specified parent ID
+		$parent_name = $context->{$type . '_buffer'}->get_parent_name();
+		if (!empty($args[$parent_name]))
+		{
+			$context->{$type . '_buffer'}->add_parent($args[$parent_name]);
 		}
 
 		return new \GraphQL\Deferred(function() use ($type, $context) {

@@ -14,6 +14,7 @@ abstract class buffer
 {
 	protected $entity_ids = [];
 	protected $fields = [];
+	protected $parent_id = 0;
 	protected $result = [];
 
 	protected $db;
@@ -43,6 +44,11 @@ abstract class buffer
 		$this->fields += $fields;
 	}
 
+	public function add_parent($parent_id)
+	{
+		$this->parent_id = $parent_id;
+	}
+
 	public function get($entity_id)
 	{
 		$this->load();
@@ -55,16 +61,31 @@ abstract class buffer
 		return $this->result;
 	}
 
+	public function get_parent_name()
+	{
+		return '';
+	}
+
 	protected function load()
 	{
 		if (empty($this->result))
 		{
+			$where = [];
 			$sql = 'SELECT ' . $this->get_entity_fields() . ', ' . implode(',', $this->fields) . '
 				FROM ' . $this->table;
 			
 			if (!empty($this->entity_ids))
 			{
-				$sql .= ' WHERE ' . $this->db->sql_in_set($this->get_entity_name(), $this->entity_ids);
+				$where[] = $this->db->sql_in_set($this->get_entity_name(), $this->entity_ids);
+			}
+			if ($this->parent_id !== 0)
+			{
+				$where[] = $this->get_parent_name() . ' = ' . (int) $this->parent_id;
+			}
+
+			if (!empty($where))
+			{
+				$sql .= ' WHERE ' . implode(' AND ', $where);
 			}
 
 			$result = $this->db->sql_query($sql);
@@ -74,8 +95,9 @@ abstract class buffer
 			}
 			$this->db->sql_freeresult($result);
 
-			// reset fields - next query won't fetch unnecessary fields this way
+			// reset fields - next query won't fetch unnecessary fields this way; do the same for parent ID
 			$this->fields = [];
+			$this->parent_id = 0;
 		}
 	}
 

@@ -43,6 +43,7 @@ class query extends ObjectType
 					'type'	=> types::listOf(types::topic()),
 					'args'	=> [
 						'topic_ids'	=> types::listOf(types::id()),
+						'forum_id'	=> types::id(),
 					],
 				],
 				'post'	=> [
@@ -55,6 +56,7 @@ class query extends ObjectType
 					'type'	=> types::listOf(types::post()),
 					'args'	=> [
 						'post_ids'	=> types::listOf(types::id()),
+						'topic_id'	=> types::id(),
 					],
 				],
 				'user'	=> [

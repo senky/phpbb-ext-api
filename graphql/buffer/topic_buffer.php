@@ -12,6 +12,11 @@ namespace senky\api\graphql\buffer;
 
 class topic_buffer extends buffer
 {
+	public function get_parent_name()
+	{
+		return 'forum_id';
+	}
+
 	protected function get_entity_name()
 	{
 		return 'topic_id';
