@@ -14,7 +14,6 @@ use senky\api\graphql\query;
 use senky\api\graphql\types;
 use GraphQL\Type\Schema;
 use GraphQL\GraphQL;
-use GraphQL\Error\FormattedError;
 use GraphQL\Error\Debug;
 use GraphQL\Server\StandardServer;
 
@@ -34,6 +33,7 @@ class main_controller
 		$server = new StandardServer([
 			'schema'	=> new Schema(['query' => new query()]),
 			'rootValue'	=> $this->db,
+			'debug'		=> Debug::INCLUDE_DEBUG_MESSAGE | Debug::INCLUDE_TRACE,
 		]);
 		$server->handleRequest();
 		die;
