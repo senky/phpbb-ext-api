@@ -10,7 +10,7 @@
 
 namespace senky\api\graphql\type;
 
-use senky\api\graphql\types;
+use senky\api\graphql\type\types;
 use GraphQL\Type\Definition\ObjectType;
 
 class user_type extends ObjectType

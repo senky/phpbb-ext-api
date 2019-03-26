@@ -8,7 +8,7 @@
  *
  */
 
-namespace senky\api\graphql;
+namespace senky\api\graphql\type;
 
 use senky\api\graphql\type\forum_type;
 use senky\api\graphql\type\post_type;

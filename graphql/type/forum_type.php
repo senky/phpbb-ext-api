@@ -11,7 +11,7 @@
 namespace senky\api\graphql\type;
 
 use GraphQL\Type\Definition\ObjectType;
-use senky\api\graphql\types;
+use senky\api\graphql\type\types;
 
 class forum_type extends ObjectType
 {
