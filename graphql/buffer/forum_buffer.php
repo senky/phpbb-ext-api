@@ -10,72 +10,15 @@
 
 namespace senky\api\graphql\buffer;
 
-class forum_buffer
+class forum_buffer extends buffer
 {
-	protected $forum_ids = [];
-	protected $fields = [];
-	protected $result = [];
-
-	protected $db;
-	protected $forums_table;
-	public function __construct(\phpbb\db\driver\driver_interface $db, $forums_table)
+	protected function get_entity_name()
 	{
-		$this->db = $db;
-		$this->forums_table = $forums_table;
+		return 'forum_id';
 	}
 
-	public function add($forum_id, $fields = [])
+	protected function get_entity_fields()
 	{
-		if (!in_array($forum_id, $this->forum_ids))
-		{
-			// add new forum
-			$this->forum_ids[] = $forum_id;
-
-			$this->add_fields($fields);
-
-			// reset results
-			$this->result = [];
-		}
-	}
-
-	public function add_fields($fields)
-	{
-		$this->fields += $fields;
-	}
-
-	public function get($forum_id)
-	{
-		$this->load();
-		return $this->result[$forum_id];
-	}
-
-	public function get_all()
-	{
-		$this->load();
-		return $this->result;
-	}
-
-	protected function load()
-	{
-		if (empty($this->result))
-		{
-			$sql = 'SELECT forum_id, ' . implode(',', $this->fields) . '
-				FROM ' . $this->forums_table;
-			
-			if (!empty($this->forum_ids))
-			{
-				$sql .= ' WHERE ' . $this->db->sql_in_set('forum_id', $this->forum_ids);
-			}
-
-			$result = $this->db->sql_query($sql);
-			while ($row = $this->db->sql_fetchrow($result))
-			{
-				$this->result[$row['forum_id']] = $row;
-			}
-			$this->db->sql_freeresult($result);
-
-			// reset fields - next query won't fetch unnecessary fields this way
-			$this->fields = [];
-		}
+		return 'forum_id';
 	}
 }
