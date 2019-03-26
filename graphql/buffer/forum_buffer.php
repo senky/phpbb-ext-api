@@ -22,28 +22,49 @@ class forum_buffer
 		$this->db = $db;
 	}
 
-	public function add($forum_id, $fields)
+	public function add($forum_id, $fields = [])
 	{
 		if (!in_array($forum_id, $this->forum_ids))
 		{
 			// add new forum
 			$this->forum_ids[] = $forum_id;
 
-			// union of fields
-			$this->fields += $fields;
+			$this->add_fields($fields);
 
 			// reset results
 			$this->result = [];
 		}
 	}
 
+	public function add_fields($fields)
+	{
+		$this->fields += $fields;
+	}
+
 	public function get($forum_id)
+	{
+		$this->load();
+		return $this->result[$forum_id];
+	}
+
+	public function get_all()
+	{
+		$this->load();
+		return $this->result;
+	}
+
+	protected function load()
 	{
 		if (empty($this->result))
 		{
 			$sql = 'SELECT forum_id, ' . implode(',', $this->fields) . '
-				FROM ' . FORUMS_TABLE . '
-				WHERE ' . $this->db->sql_in_set('forum_id', $this->forum_ids);
+				FROM ' . FORUMS_TABLE;
+			
+			if (!empty($this->forum_ids))
+			{
+				$sql .= ' WHERE ' . $this->db->sql_in_set('forum_id', $this->forum_ids);
+			}
+
 			$result = $this->db->sql_query($sql);
 			while ($row = $this->db->sql_fetchrow($result))
 			{
@@ -54,7 +75,5 @@ class forum_buffer
 			// reset fields - next query won't fetch unnecessary fields this way
 			$this->fields = [];
 		}
-
-		return $this->result[$forum_id];
 	}
 }

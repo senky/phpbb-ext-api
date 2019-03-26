@@ -42,19 +42,19 @@ class query extends ObjectType
 					],
 					'resolve'	=> function($_, $args, $context, ResolveInfo $info) {
 						$fields = array_keys($info->getFieldSelection());
-
-						$sql = 'SELECT ' . implode(',', $fields) . '
-							FROM ' . FORUMS_TABLE;
+						$context->forum_buffer->add_fields($fields);
 
 						if (!empty($args['forum_ids']))
 						{
-							$sql .= ' WHERE ' . $context->db->sql_in_set('forum_id', $args['forum_ids']);
+							foreach ($args['forum_ids'] as $forum_id)
+							{
+								$context->forum_buffer->add($forum_id);
+							}
 						}
 
-						$result = $context->db->sql_query($sql);
-						$rows = $context->db->sql_fetchrowset($result);
-						$context->db->sql_freeresult($result);
-						return $rows;
+						return new \GraphQL\Deferred(function() use ($context) {
+							return $context->forum_buffer->get_all();
+						});
 					},
 				],
 				'topic'	=> [
