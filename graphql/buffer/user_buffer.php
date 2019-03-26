@@ -10,26 +10,26 @@
 
 namespace senky\api\graphql\buffer;
 
-class post_buffer
+class user_buffer
 {
-	protected $post_ids = [];
+	protected $user_ids = [];
 	protected $fields = [];
 	protected $result = [];
 
 	protected $db;
-	protected $posts_table;
-	public function __construct(\phpbb\db\driver\driver_interface $db, $posts_table)
+	protected $users_table;
+	public function __construct(\phpbb\db\driver\driver_interface $db, $users_table)
 	{
 		$this->db = $db;
-		$this->posts_table = $posts_table;
+		$this->users_table = $users_table;
 	}
 
-	public function add($post_id, $fields = [])
+	public function add($user_id, $fields = [])
 	{
-		if (!in_array($post_id, $this->post_ids))
+		if (!in_array($user_id, $this->user_ids))
 		{
-			// add new post
-			$this->post_ids[] = $post_id;
+			// add new user
+			$this->user_ids[] = $user_id;
 
 			$this->add_fields($fields);
 
@@ -43,10 +43,10 @@ class post_buffer
 		$this->fields += $fields;
 	}
 
-	public function get($post_id)
+	public function get($user_id)
 	{
 		$this->load();
-		return $this->result[$post_id];
+		return $this->result[$user_id];
 	}
 
 	public function get_all()
@@ -59,18 +59,18 @@ class post_buffer
 	{
 		if (empty($this->result))
 		{
-			$sql = 'SELECT post_id, topic_id, forum_id, ' . implode(',', $this->fields) . '
-				FROM ' . $this->posts_table;
+			$sql = 'SELECT user_id, ' . implode(',', $this->fields) . '
+				FROM ' . $this->users_table;
 			
-			if (!empty($this->post_ids))
+			if (!empty($this->user_ids))
 			{
-				$sql .= ' WHERE ' . $this->db->sql_in_set('post_id', $this->post_ids);
+				$sql .= ' WHERE ' . $this->db->sql_in_set('user_id', $this->user_ids);
 			}
 
 			$result = $this->db->sql_query($sql);
 			while ($row = $this->db->sql_fetchrow($result))
 			{
-				$this->result[$row['post_id']] = $row;
+				$this->result[$row['user_id']] = $row;
 			}
 			$this->db->sql_freeresult($result);
 

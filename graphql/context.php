@@ -16,12 +16,14 @@ class context
 	public $forum_buffer;
 	public $post_buffer;
 	public $topic_buffer;
-	public function __construct(\phpbb\db\driver\driver_interface $db, \senky\api\graphql\buffer\forum_buffer $forum_buffer, \senky\api\graphql\buffer\post_buffer $post_buffer, \senky\api\graphql\buffer\topic_buffer $topic_buffer)
+	public $user_buffer;
+	public function __construct(\phpbb\db\driver\driver_interface $db, \senky\api\graphql\buffer\forum_buffer $forum_buffer, \senky\api\graphql\buffer\post_buffer $post_buffer, \senky\api\graphql\buffer\topic_buffer $topic_buffer, \senky\api\graphql\buffer\user_buffer $user_buffer)
 	{
 		$this->db = $db;
 		$this->forum_buffer = $forum_buffer;
 		$this->post_buffer = $post_buffer;
 		$this->topic_buffer = $topic_buffer;
+		$this->user_buffer = $user_buffer;
 	}
 
 	public static function clean_fields($fields)
