@@ -93,6 +93,20 @@ class query extends ObjectType
 						});
 					},
 				],
+				'post'	=> [
+					'type'	=> types::post(),
+					'args'	=> [
+						'post_id'	=> types::id(),
+					],
+					'resolve'	=> function($_, $args, $context, ResolveInfo $info) {
+						$fields = array_keys($info->getFieldSelection());
+						$context->post_buffer->add($args['post_id'], $fields);
+
+						return new \GraphQL\Deferred(function() use ($args, $context) {
+							return $context->post_buffer->get($args['post_id']);
+						});
+					},
+				],
 			],
 		];
 		parent::__construct($config);

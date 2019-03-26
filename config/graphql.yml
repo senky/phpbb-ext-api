@@ -4,6 +4,7 @@ services:
         arguments:
             - '@dbal.conn'
             - '@senky.api.graphql.buffer.forum_buffer'
+            - '@senky.api.graphql.buffer.post_buffer'
             - '@senky.api.graphql.buffer.topic_buffer'
 
     senky.api.graphql.buffer.forum_buffer:
@@ -11,6 +12,12 @@ services:
         arguments:
             - '@dbal.conn'
             - '%tables.forums%'
+
+    senky.api.graphql.buffer.post_buffer:
+        class: senky\api\graphql\buffer\post_buffer
+        arguments:
+            - '@dbal.conn'
+            - '%tables.posts%'
 
     senky.api.graphql.buffer.topic_buffer:
         class: senky\api\graphql\buffer\topic_buffer
