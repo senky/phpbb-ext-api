@@ -88,19 +88,6 @@ class query extends ObjectType
 						$row = $context->db->sql_fetchrow($result);
 						$context->db->sql_freeresult($result);
 
-						if ($fetch_forum)
-						{
-							$fields = $info->getFieldSelection(1);
-							$fields = array_keys($fields['forum']);
-
-							$sql = 'SELECT ' . implode(',', $fields) . '
-								FROM ' . FORUMS_TABLE . '
-								WHERE forum_id = ' . (int) $row['forum_id'];
-							$result = $context->db->sql_query($sql);
-							$row['forum'] = $context->db->sql_fetchrow($result);
-							$context->db->sql_freeresult($result);
-						}
-
 						return $row;
 					},
 				],
