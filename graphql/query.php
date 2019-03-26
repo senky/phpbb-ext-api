@@ -28,14 +28,11 @@ class query extends ObjectType
 					],
 					'resolve'	=> function($_, $args, $context, ResolveInfo $info) {
 						$fields = array_keys($info->getFieldSelection());
+						$context->forum_buffer->add($args['forum_id'], $fields);
 
-						$sql = 'SELECT ' . implode(',', $fields) . '
-							FROM ' . FORUMS_TABLE . '
-							WHERE forum_id = ' . (int) $args['forum_id'];
-						$result = $context->db->sql_query($sql);
-						$row = $context->db->sql_fetchrow($result);
-						$context->db->sql_freeresult($result);
-						return $row;
+						return new \GraphQL\Deferred(function() use ($args, $context) {
+							return $context->forum_buffer->get($args['forum_id']);
+						});
 					},
 				],
 				'forums'	=> [
