@@ -18,8 +18,9 @@ class forum_type extends ObjectType
 	public function __construct()
 	{
 		$config = [
-			'name'		=> 'Forum',
-			'fields'	=> [
+			'name'			=> 'Forum',
+			'needs_buffer'	=> true,
+			'fields'		=> [
 				'forum_id'					=> types::id(),
 				'parent_id'					=> types::id(),
 				'left_id'					=> types::id(),

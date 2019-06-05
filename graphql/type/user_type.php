@@ -18,8 +18,9 @@ class user_type extends ObjectType
 	public function __construct()
 	{
 		$config = [
-			'name'		=> 'User',
-			'fields'	=> [
+			'name'			=> 'User',
+			'needs_buffer'	=> true,
+			'fields'		=> [
 				'user_id'					=> types::id(),
 				'user_type'					=> types::int(),
 				'group_id'					=> types::id(),

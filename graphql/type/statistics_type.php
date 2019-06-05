@@ -19,8 +19,9 @@ class statistics_type extends ObjectType
 	public function __construct()
 	{
 		$config = [
-			'name'		=> 'Statistics',
-			'fields'	=> [
+			'name'			=> 'Statistics',
+			'needs_buffer'	=> false,
+			'fields'		=> [
 				'total_posts'	=> [
 					'type'		=> types::int(),
 					'resolve'	=> function($row, $args, $context, ResolveInfo $info) {

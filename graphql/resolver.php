@@ -16,8 +16,8 @@ class resolver
 {
 	public function resolve($row, $args, $context, ResolveInfo $info)
 	{
-		// exceptions
-		if (in_array($info->fieldName, $this->get_types_exceptions()))
+		// types without buffers don't need deferred resolution
+		if (empty($info->returnType->config['needs_buffer']))
 		{
 			return [];
 		}
@@ -87,6 +87,7 @@ class resolver
 		return array_keys($fields);
 	}
 
+	// TODO: try to rewrite to interfaces: https://webonyx.github.io/graphql-php/type-system/interfaces/
 	protected static function get_additional_fields($fields)
 	{
 		$additional_fields = [];
@@ -95,13 +96,6 @@ class resolver
 			$additional_fields = ['post_text', 'bbcode_uid', 'bbcode_bitfield'];
 		}
 		return $additional_fields;
-	}
-
-	protected function get_types_exceptions()
-	{
-		return [
-			'statistics',
-		];
 	}
 
 	protected function translate_field_name($field_name)

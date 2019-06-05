@@ -19,8 +19,9 @@ class post_type extends ObjectType
 	public function __construct()
 	{
 		$config = [
-			'name'		=> 'Post',
-			'fields'	=> [
+			'name'			=> 'Post',
+			'needs_buffer'	=> true,
+			'fields'		=> [
 				'post_id'				=> types::id(),
 				'topic_id'				=> types::id(),
 				'forum_id'				=> types::id(),

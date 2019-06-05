@@ -19,8 +19,9 @@ class topic_type extends ObjectType
 	public function __construct()
 	{
 		$config = [
-			'name'		=> 'Topic',
-			'fields'	=> [
+			'name'			=> 'Topic',
+			'needs_buffer'	=> true,
+			'fields'		=> [
 				'topic_id'					=> types::id(),
 				'forum_id'					=> types::id(),
 				'icon_id'					=> types::id(),
