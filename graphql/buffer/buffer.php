@@ -54,7 +54,7 @@ abstract class buffer
 	public function get($entity_id)
 	{
 		$this->load();
-		return $this->result[$entity_id] ?? [];
+		return $this->result[$entity_id] ?? null;
 	}
 
 	public function get_all()
