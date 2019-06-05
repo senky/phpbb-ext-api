@@ -10,10 +10,6 @@
 
 namespace senky\api\graphql\type;
 
-use senky\api\graphql\type\forum_type;
-use senky\api\graphql\type\post_type;
-use senky\api\graphql\type\topic_type;
-use senky\api\graphql\type\user_type;
 use GraphQL\Type\Definition\ListOfType;
 use GraphQL\Type\Definition\NonNull;
 use GraphQL\Type\Definition\Type;
@@ -25,24 +21,14 @@ class types
 	private static $topic;
 	private static $user;
 
-	public static function forum()
+	public static function __callStatic($name, $args)
 	{
-		return self::$forum ?: (self::$forum = new forum_type());
-	}
+		if (method_exists(__CLASS__, $name)) {
+			return self::$name;
+		}
 
-	public static function post()
-	{
-		return self::$post ?: (self::$post = new post_type());
-	}
-
-	public static function topic()
-	{
-		return self::$topic ?: (self::$topic = new topic_type());
-	}
-
-	public static function user()
-	{
-		return self::$user ?: (self::$user = new user_type());
+		$class_name = 'senky\\api\\graphql\\type\\' . $name . '_type';
+		return self::$$name ?: (self::$$name = new $class_name());
 	}
 
 	public static function boolean()
