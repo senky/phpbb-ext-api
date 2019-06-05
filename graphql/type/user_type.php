@@ -32,7 +32,7 @@ class user_type extends type
 				'user_password'				=> types::string(),
 				'user_passchg'				=> types::int(),
 				'user_email'				=> types::string(),
-				'user_email_hash'			=> types::int(),
+				'user_email_hash'			=> types::float(),
 				'user_birthday'				=> types::string(),
 				'user_lastvisit'			=> types::int(),
 				'user_lastmark'				=> types::int(),

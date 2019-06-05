@@ -19,7 +19,6 @@ class statistics_type extends type
 	{
 		$this->definition = [
 			'name'			=> 'Statistics',
-			'needs_buffer'	=> false,
 			'fields'		=> [
 				'total_posts'	=> [
 					'type'		=> types::int(),

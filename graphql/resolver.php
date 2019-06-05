@@ -11,6 +11,7 @@
 namespace senky\api\graphql;
 
 use GraphQL\Type\Definition\ResolveInfo;
+use senky\api\graphql\type\type as phpbbType;
 
 class resolver
 {
@@ -18,7 +19,8 @@ class resolver
 	{
 		// Types without buffers don't need deferred resolution.
 		// Such types should resolve all fields using inline resolvers.
-		if (empty($info->returnType->config['needs_buffer']))
+		$type = $this->get_scalar_type($info->returnType);
+		if ($type instanceof phpbbType && empty($type->config['needs_buffer']))
 		{
 			return [];
 		}
@@ -81,11 +83,25 @@ class resolver
 
 	protected function get_fields(ResolveInfo $info)
 	{
-		$fields = $info->getFieldSelection();
-		$fields = $info->returnType->clean_fields($fields);
+		$type = $this->get_scalar_type($info->returnType);
 
-		$fields += $info->returnType->get_required_fields($info, $fields);
+		$fields = $info->getFieldSelection();
+		if ($type instanceof phpbbType)
+		{
+			$fields = $type->clean_fields($fields);
+			$fields = array_keys($fields);
+			$fields += $type->get_required_fields($fields);
+		}
 
 		return $fields;
+	}
+
+	protected function get_scalar_type($type)
+	{
+		if ($type instanceof \GraphQL\Type\Definition\ListOfType)
+		{
+			$type = $type->getWrappedType();
+		}
+		return $type;
 	}
 }

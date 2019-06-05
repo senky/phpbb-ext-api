@@ -10,8 +10,6 @@
 
 namespace senky\api\graphql\type;
 
-use GraphQL\Type\Definition\ListOfType;
-use GraphQL\Type\Definition\NonNull;
 use GraphQL\Type\Definition\Type;
 
 class types
@@ -47,6 +45,11 @@ class types
 		return Type::int();
 	}
 
+	public static function float()
+	{
+		return Type::float();
+	}
+
 	public static function string()
 	{
 		return Type::string();
@@ -54,11 +57,11 @@ class types
 
 	public static function listOf($type)
 	{
-		return new ListOfType($type);
+		return Type::listOf($type);
 	}
 
 	public static function nonNull($type)
 	{
-		return new NonNull($type);
+		return Type::nonNull($type);
 	}
 }

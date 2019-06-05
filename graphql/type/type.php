@@ -26,9 +26,9 @@ class type extends ObjectType
 	public function get_required_fields($fields)
 	{
 		$additional_fields = [];
-		foreach ($fields as $field => $id)
+		foreach ($fields as $field)
 		{
-			if (!empty($this->definition['fields'][$field]['requires_fields']))
+			if (is_array($this->definition['fields'][$field]) && !empty($this->definition['fields'][$field]['requires_fields']))
 			{
 				$additional_fields += $this->definition['fields'][$field]['requires_fields'];
 			}
@@ -63,7 +63,6 @@ class type extends ObjectType
 
 	/**
 	 * Cleans fields from additional fields (not present in DB).
-	 * Additionally, this method also converts fields to simpler format.
 	 *
 	 * @param [string] $fields Requested fields
 	 * @return [string] Cleaned fields
@@ -79,6 +78,6 @@ class type extends ObjectType
 			}
 		}
 
-		return array_keys($fields);
+		return $fields;
 	}
 }
