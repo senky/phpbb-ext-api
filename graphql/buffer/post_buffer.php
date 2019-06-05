@@ -24,7 +24,7 @@ class post_buffer extends buffer
 
 	protected function get_entity_fields()
 	{
-		return 'post_id, topic_id, forum_id';
+		return 'post_id, topic_id, forum_id, poster_id';
 	}
 
 	protected function get_entity_permission()

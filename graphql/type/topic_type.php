@@ -11,14 +11,13 @@
 namespace senky\api\graphql\type;
 
 use senky\api\graphql\type\types;
-use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
 
-class topic_type extends ObjectType
+class topic_type extends type
 {
 	public function __construct()
 	{
-		$config = [
+		$this->definition = [
 			'name'			=> 'Topic',
 			'needs_buffer'	=> true,
 			'fields'		=> [
@@ -70,6 +69,6 @@ class topic_type extends ObjectType
 				],
 			],
 		];
-		parent::__construct($config);
+		parent::__construct($this->definition);
 	}
 }

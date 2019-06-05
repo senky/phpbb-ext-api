@@ -11,14 +11,13 @@
 namespace senky\api\graphql\type;
 
 use senky\api\graphql\type\types;
-use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
 
-class post_type extends ObjectType
+class post_type extends type
 {
 	public function __construct()
 	{
-		$config = [
+		$this->definition = [
 			'name'			=> 'Post',
 			'needs_buffer'	=> true,
 			'fields'		=> [
@@ -54,10 +53,12 @@ class post_type extends ObjectType
 
 				// additional fields
 				'post_html'	=> [
-					'type'	=> types::string(),
-					'resolve'	=> function($row, $args, $context, ResolveInfo $info) {
+					'type'				=> types::string(),
+					'requires_fields'	=> ['post_text', 'bbcode_uid', 'bbcode_bitfield'],
+					'resolve'			=> function($row, $args, $context, ResolveInfo $info) {
 						return generate_text_for_display($row['post_text'], $row['bbcode_uid'], $row['bbcode_bitfield'], ($row['bbcode_bitfield'] ? OPTION_FLAG_BBCODE : 0) | OPTION_FLAG_SMILIES);
 					},
+					
 				],
 				'topic'	=> [
 					'type'	=> types::topic(),
@@ -71,8 +72,15 @@ class post_type extends ObjectType
 						return $context->resolver->resolve($row, $args, $context, $info);
 					},
 				],
+				'poster'	=> [
+					'type'		=> types::user(),
+					'resolve'	=> function($row, $args, $context, ResolveInfo $info) {
+						$row['user_id'] = $row['poster_id'];
+						return $context->resolver->resolve($row, $args, $context, $info);
+					},
+				],
 			],
 		];
-		parent::__construct($config);
+		parent::__construct($this->definition);
 	}
 }

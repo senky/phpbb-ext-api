@@ -10,14 +10,13 @@
 
 namespace senky\api\graphql\type;
 
-use GraphQL\Type\Definition\ObjectType;
 use senky\api\graphql\type\types;
 
-class forum_type extends ObjectType
+class forum_type extends type
 {
 	public function __construct()
 	{
-		$config = [
+		$this->definition = [
 			'name'			=> 'Forum',
 			'needs_buffer'	=> true,
 			'fields'		=> [
@@ -72,6 +71,6 @@ class forum_type extends ObjectType
 				'forum_topics_softdeleted'	=> types::int(),
 			],
 		];
-		parent::__construct($config);
+		parent::__construct($this->definition);
 	}
 }

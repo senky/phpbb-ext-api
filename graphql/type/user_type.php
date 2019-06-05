@@ -11,13 +11,12 @@
 namespace senky\api\graphql\type;
 
 use senky\api\graphql\type\types;
-use GraphQL\Type\Definition\ObjectType;
 
-class user_type extends ObjectType
+class user_type extends type
 {
 	public function __construct()
 	{
-		$config = [
+		$this->definition = [
 			'name'			=> 'User',
 			'needs_buffer'	=> true,
 			'fields'		=> [
@@ -89,6 +88,6 @@ class user_type extends ObjectType
 				'user_reminded_time'		=> types::int(),
 			],
 		];
-		parent::__construct($config);
+		parent::__construct($this->definition);
 	}
 }

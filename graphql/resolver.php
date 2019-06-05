@@ -16,14 +16,18 @@ class resolver
 {
 	public function resolve($row, $args, $context, ResolveInfo $info)
 	{
-		// types without buffers don't need deferred resolution
+		// Types without buffers don't need deferred resolution.
+		// Such types should resolve all fields using inline resolvers.
 		if (empty($info->returnType->config['needs_buffer']))
 		{
 			return [];
 		}
 
-		// translations
-		$info->fieldName = $this->translate_field_name($info->fieldName);
+		// translate field to correct type. E.g. poster -> user.
+		if (method_exists($info->parentType, 'translate_field_name'))
+		{
+			$info->fieldName = $info->parentType->translate_field_name($info->fieldName);
+		}
 
 		// decide whether we are going to fetch multiple rows or just one
 		$is_multiple = substr($info->fieldName, -1) === 's';
@@ -39,10 +43,7 @@ class resolver
 
 	protected function resolve_single($type, $args, $context, ResolveInfo $info)
 	{
-		$fields = $info->getFieldSelection();
-		$additional_fields = $this->get_additional_fields($fields);
-		$fields = $this->clean_fields($fields);
-		$fields += $additional_fields;
+		$fields = $this->get_fields($info);
 
 		$context->{$type . '_buffer'}->add($args[$type . '_id'], $fields);
 
@@ -53,10 +54,7 @@ class resolver
 
 	protected function resolve_multiple($type, $args, $context, ResolveInfo $info)
 	{
-		$fields = $info->getFieldSelection();
-		$additional_fields = $this->get_additional_fields($fields);
-		$fields = $this->clean_fields($fields);
-		$fields += $additional_fields;
+		$fields = $this->get_fields($info);
 
 		$context->{$type . '_buffer'}->add_fields($fields);
 
@@ -81,30 +79,13 @@ class resolver
 		});
 	}
 
-	protected static function clean_fields($fields)
+	protected function get_fields(ResolveInfo $info)
 	{
-		unset($fields['forum'], $fields['topic'], $fields['post_html']);
-		return array_keys($fields);
-	}
+		$fields = $info->getFieldSelection();
+		$fields = $info->returnType->clean_fields($fields);
 
-	// TODO: try to rewrite to interfaces: https://webonyx.github.io/graphql-php/type-system/interfaces/
-	protected static function get_additional_fields($fields)
-	{
-		$additional_fields = [];
-		if (isset($fields['post_html']))
-		{
-			$additional_fields = ['post_text', 'bbcode_uid', 'bbcode_bitfield'];
-		}
-		return $additional_fields;
-	}
+		$fields += $info->returnType->get_required_fields($info, $fields);
 
-	protected function translate_field_name($field_name)
-	{
-		switch ($field_name)
-		{
-			case 'newest_user':
-				return 'user';
-			break;
-		}
+		return $fields;
 	}
 }
