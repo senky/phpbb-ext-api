@@ -18,6 +18,7 @@ class types
 {
 	private static $forum;
 	private static $post;
+	private static $statistics;
 	private static $topic;
 	private static $user;
 

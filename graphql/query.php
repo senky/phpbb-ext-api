@@ -74,6 +74,7 @@ class query extends ObjectType
 						'user_ids'	=> types::listOf(types::id()),
 					],
 				],
+				'statistics'	=> types::statistics(),
 			],
 			'resolveField'	=> [$resolver, 'resolve'],
 		];

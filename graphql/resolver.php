@@ -16,6 +16,15 @@ class resolver
 {
 	public function resolve($row, $args, $context, ResolveInfo $info)
 	{
+		// exceptions
+		if (in_array($info->fieldName, $this->get_types_exceptions()))
+		{
+			return [];
+		}
+
+		// translations
+		$info->fieldName = $this->translate_field_name($info->fieldName);
+
 		// decide whether we are going to fetch multiple rows or just one
 		$is_multiple = substr($info->fieldName, -1) === 's';
 
@@ -30,7 +39,11 @@ class resolver
 
 	protected function resolve_single($type, $args, $context, ResolveInfo $info)
 	{
-		$fields = $this->clean_fields($info->getFieldSelection());
+		$fields = $info->getFieldSelection();
+		$additional_fields = $this->get_additional_fields($fields);
+		$fields = $this->clean_fields($fields);
+		$fields += $additional_fields;
+
 		$context->{$type . '_buffer'}->add($args[$type . '_id'], $fields);
 
 		return new \GraphQL\Deferred(function() use ($type, $args, $context) {
@@ -82,5 +95,22 @@ class resolver
 			$additional_fields = ['post_text', 'bbcode_uid', 'bbcode_bitfield'];
 		}
 		return $additional_fields;
+	}
+
+	protected function get_types_exceptions()
+	{
+		return [
+			'statistics',
+		];
+	}
+
+	protected function translate_field_name($field_name)
+	{
+		switch ($field_name)
+		{
+			case 'newest_user':
+				return 'user';
+			break;
+		}
 	}
 }

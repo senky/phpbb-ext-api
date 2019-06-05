@@ -3,6 +3,7 @@ services:
         class: senky\api\graphql\context
         arguments:
             - '@dbal.conn'
+            - '@config'
             - '@senky.api.graphql.resolver'
             - '@senky.api.graphql.buffer.forum_buffer'
             - '@senky.api.graphql.buffer.post_buffer'
