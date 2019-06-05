@@ -16,7 +16,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 
 class query extends ObjectType
 {
-	public function __construct(\senky\api\graphql\resolver $resolver)
+	public function __construct(\senky\api\graphql\resolver $resolver, \phpbb\user $user)
 	{
 		$config = [
 			'name'		=> 'Query',
@@ -62,7 +62,10 @@ class query extends ObjectType
 				'user'	=> [
 					'type'	=> types::user(),
 					'args'	=> [
-						'user_id'	=> types::id(),
+						'user_id'	=> [
+							'type'			=> types::id(),
+							'defaultValue'	=> (int) $user->data['user_id'],
+						],
 					],
 				],
 				'users'	=> [

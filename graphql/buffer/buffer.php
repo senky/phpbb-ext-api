@@ -54,7 +54,7 @@ abstract class buffer
 	public function get($entity_id)
 	{
 		$this->load();
-		return $this->result[$entity_id];
+		return $this->result[$entity_id] ?? [];
 	}
 
 	public function get_all()
@@ -97,7 +97,7 @@ abstract class buffer
 				if (
 					(!empty($row['forum_id']) && !$this->auth->acl_get($this->get_entity_permission(), $row['forum_id']))
 					||
-					(empty($row['forum_id'] && !$this->auth->acl_get($this->get_entity_permission())))
+					(empty($row['forum_id']) && !$this->auth->acl_get($this->get_entity_permission()))
 				)
 				{
 					continue;

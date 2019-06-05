@@ -12,6 +12,12 @@ services:
     senky.api.graphql.resolver:
         class: senky\api\graphql\resolver
 
+    senky.api.graphql.query:
+        class: senky\api\graphql\query
+        arguments:
+            - '@senky.api.graphql.resolver'
+            - '@user'
+
     senky.api.graphql.buffer.forum_buffer:
         class: senky\api\graphql\buffer\forum_buffer
         arguments:

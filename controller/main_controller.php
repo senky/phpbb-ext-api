@@ -21,19 +21,19 @@ class main_controller
 {
 	protected $request;
 	protected $context;
-	protected $resolver;
-	public function __construct(\phpbb\request\request $request, \senky\api\graphql\context $context, \senky\api\graphql\resolver $resolver)
+	protected $query;
+	public function __construct(\phpbb\request\request $request, \senky\api\graphql\context $context, \senky\api\graphql\query $query)
 	{
 		$this->request = $request;
 		$this->context = $context;
-		$this->resolver = $resolver;
+		$this->query = $query;
 	}
 
 	public function handle()
 	{
 		$this->request->enable_super_globals();
 		$server = new StandardServer([
-			'schema'	=> new Schema(['query' => new query($this->resolver)]),
+			'schema'	=> new Schema(['query' => $this->query]),
 			'context'	=> $this->context,
 			'debug'		=> Debug::INCLUDE_DEBUG_MESSAGE | Debug::INCLUDE_TRACE,
 		]);
