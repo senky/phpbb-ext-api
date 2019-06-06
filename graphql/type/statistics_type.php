@@ -22,19 +22,19 @@ class statistics_type extends type
 			'fields'		=> [
 				'total_posts'	=> [
 					'type'		=> types::int(),
-					'resolve'	=> function($row, $args, $context, ResolveInfo $info) {
+					'resolve'	=> function($row, $args, $context) {
 						return (int) $context->config['num_posts'];
 					},
 				],
 				'total_topics'	=> [
 					'type'		=> types::int(),
-					'resolve'	=> function($row, $args, $context, ResolveInfo $info) {
+					'resolve'	=> function($row, $args, $context) {
 						return (int) $context->config['num_topics'];
 					},
 				],
 				'total_users'	=> [
 					'type'		=> types::int(),
-					'resolve'	=> function($row, $args, $context, ResolveInfo $info) {
+					'resolve'	=> function($row, $args, $context) {
 						return (int) $context->config['num_users'];
 					},
 				],
@@ -45,8 +45,46 @@ class statistics_type extends type
 						return $context->resolver->resolve($row, $args, $context, $info);
 					},
 				],
+				'online_registered'	=> [
+					'type'		=> types::int(),
+					'resolve'	=> function($row, $args, $context) {
+						return $this->obtain_users_online('visible_online', $context);
+					},
+				],
+				'online_hidden'	=> [
+					'type'		=> types::int(),
+					'resolve'	=> function($row, $args, $context) {
+						return $this->obtain_users_online('hidden_online', $context);
+					},
+				],
+				'online_guests'	=> [
+					'type'		=> types::int(),
+					'resolve'	=> function($row, $args, $context) {
+						return $this->obtain_users_online('guests_online', $context);
+					},
+				]
 			],
 		];
 		parent::__construct($this->definition);
+	}
+
+	protected function obtain_users_online($type, $context) {
+		static $online_users = null;
+
+		if (!$context->config['load_online'] || !$context->config['load_online_time'])
+		{
+			return -1;
+		}
+
+		if ($type === 'guests_online' && !$context->config['load_online_guests'])
+		{
+			return -1;
+		}
+
+		if (!$online_users)
+		{
+			$online_users = obtain_users_online();
+		}
+		return $online_users[$type] ?? -1;
 	}
 }
