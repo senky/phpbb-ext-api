@@ -29,7 +29,7 @@ abstract class junction_buffer
 
 	public function add($entity_id, $entity_key, $fields = [])
 	{
-		if (!in_array($entity_id, $this->entity_ids))
+		if ($entity_key !== $this->entity_key || !in_array($entity_id, $this->entity_ids))
 		{
 			$this->entity_key = $entity_key;
 

@@ -53,6 +53,7 @@ class post_type extends type
 
 				// additional fields
 				'post_html'	=> [
+					'additional'		=> true,
 					'type'				=> types::string(),
 					'requires_fields'	=> ['post_text', 'bbcode_uid', 'bbcode_bitfield'],
 					'resolve'			=> function($row, $args, $context, ResolveInfo $info) {
@@ -61,20 +62,23 @@ class post_type extends type
 					
 				],
 				'topic'	=> [
-					'type'	=> types::topic(),
-					'resolve'	=> function($row, $args, $context, ResolveInfo $info) {
+					'additional'	=> true,
+					'type'			=> types::topic(),
+					'resolve'		=> function($row, $args, $context, ResolveInfo $info) {
 						return $context->resolver->resolve($row, $args, $context, $info);
 					},
 				],
 				'forum'	=> [
-					'type'	=> types::forum(),
-					'resolve'	=> function($row, $args, $context, ResolveInfo $info) {
+					'additional'	=> true,
+					'type'			=> types::forum(),
+					'resolve'		=> function($row, $args, $context, ResolveInfo $info) {
 						return $context->resolver->resolve($row, $args, $context, $info);
 					},
 				],
 				'poster'	=> [
-					'type'		=> types::user(),
-					'resolve'	=> function($row, $args, $context, ResolveInfo $info) {
+					'additional'	=> true,
+					'type'			=> types::user(),
+					'resolve'		=> function($row, $args, $context, ResolveInfo $info) {
 						$row['user_id'] = $row['poster_id'];
 						return $context->resolver->resolve($row, $args, $context, $info);
 					},

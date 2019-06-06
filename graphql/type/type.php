@@ -15,6 +15,7 @@ use GraphQL\Type\Definition\ObjectType;
 class type extends ObjectType
 {
 	protected $definition;
+	protected $fields;
 
 	/**
 	 * Some additional fields need other fields to operate.
@@ -23,14 +24,15 @@ class type extends ObjectType
 	 * @param [string] $fields Requested fields
 	 * @return [string] Additional fields
 	 */
-	public function get_required_fields($fields)
+	public function get_required_fields($requested_fields)
 	{
+		$fields = $this->get_fields();
 		$additional_fields = [];
-		foreach ($fields as $field)
+		foreach ($requested_fields as $field)
 		{
-			if (is_array($this->definition['fields'][$field]) && !empty($this->definition['fields'][$field]['requires_fields']))
+			if (is_array($fields[$field]) && !empty($fields[$field]['requires_fields']))
 			{
-				$additional_fields += $this->definition['fields'][$field]['requires_fields'];
+				$additional_fields += $fields[$field]['requires_fields'];
 			}
 		}
 		return $additional_fields;
@@ -45,20 +47,24 @@ class type extends ObjectType
 	 */
 	public function translate_field_name($field)
 	{
-		if (empty($this->definition['fields'][$field]['type']))
+		$fields = $this->get_fields();
+		if (empty($fields[$field]['additional']))
 		{
 			return $field;
 		}
 
-		if ($this->definition['fields'][$field]['type'] instanceof type)
+		$plural = false;
+		$class = $fields[$field]['type'];
+		if (method_exists($class, 'getWrappedType'))
 		{
-			$class_full = get_class($this->definition['fields'][$field]['type']);
-			$class_parts = explode('\\', $class_full);
-			$class_name = end($class_parts);
-			return substr($class_name, 0, -5);
+			$plural = true;
+			$class = $class->getWrappedType();
 		}
 
-		return $field;
+		$class_full = get_class($class);
+		$class_parts = explode('\\', $class_full);
+		$class_name = end($class_parts);
+		return substr($class_name, 0, -5) . ($plural ? 's' : '');
 	}
 
 	/**
@@ -69,7 +75,8 @@ class type extends ObjectType
 	 */
 	public function clean_fields($fields)
 	{
-		foreach ($this->definition['fields'] as $field_name => $field_type)
+		$fields = $this->get_fields();
+		foreach ($fields as $field_name => $field_type)
 		{
 			// we need to remove additional fields. Only they are of array type.
 			if (is_array($field_type))
@@ -79,5 +86,15 @@ class type extends ObjectType
 		}
 
 		return $fields;
+	}
+
+	protected function get_fields()
+	{
+		if (!empty($this->fields))
+		{
+			return $this->fields;
+		}
+		$this->fields = $this->definition['fields']();
+		return $this->fields;
 	}
 }

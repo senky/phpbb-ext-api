@@ -62,8 +62,9 @@ class topic_type extends type
 
 				// additional fields
 				'forum'	=> [
-					'type'	=> types::forum(),
-					'resolve'	=> function($row, $args, $context, ResolveInfo $info) {
+					'additional'	=> true,
+					'type'			=> types::forum(),
+					'resolve'		=> function($row, $args, $context, ResolveInfo $info) {
 						return $context->resolver->resolve($row, $args, $context, $info);
 					},
 				],
