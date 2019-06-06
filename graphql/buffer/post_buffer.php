@@ -27,8 +27,15 @@ class post_buffer extends buffer
 		return 'post_id, topic_id, forum_id, poster_id';
 	}
 
-	protected function get_entity_permission()
+	protected function auth_check($row)
 	{
-		return 'f_read';
+		if (
+			(!empty($row['forum_id']) && !$this->auth->acl_get('f_read', $row['forum_id']))
+			||
+			(empty($row['forum_id']) && !$this->auth->acl_get('f_read'))
+		) {
+			return false;
+		}
+		return $row;
 	}
 }

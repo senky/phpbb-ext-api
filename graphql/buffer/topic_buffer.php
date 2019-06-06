@@ -26,9 +26,16 @@ class topic_buffer extends buffer
 	{
 		return 'topic_id, forum_id';
 	}
-
-	protected function get_entity_permission()
+	
+	protected function auth_check($row)
 	{
-		return 'f_list_topics';
+		if (
+			(!empty($row['forum_id']) && !$this->auth->acl_get('f_list_topics', $row['forum_id']))
+			||
+			(empty($row['forum_id']) && !$this->auth->acl_get('f_list_topics'))
+		) {
+			return false;
+		}
+		return $row;
 	}
 }

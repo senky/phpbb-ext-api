@@ -22,8 +22,15 @@ class forum_buffer extends buffer
 		return 'forum_id';
 	}
 
-	protected function get_entity_permission()
+	protected function auth_check($row)
 	{
-		return 'f_list';
+		if (
+			(!empty($row['forum_id']) && !$this->auth->acl_get('f_list', $row['forum_id']))
+			||
+			(empty($row['forum_id']) && !$this->auth->acl_get('f_list'))
+		) {
+			return false;
+		}
+		return $row;
 	}
 }

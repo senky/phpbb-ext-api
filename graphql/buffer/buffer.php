@@ -94,15 +94,11 @@ abstract class buffer
 			$result = $this->db->sql_query($sql);
 			while ($row = $this->db->sql_fetchrow($result))
 			{
-				if (
-					(!empty($row['forum_id']) && !$this->auth->acl_get($this->get_entity_permission(), $row['forum_id']))
-					||
-					(empty($row['forum_id']) && !$this->auth->acl_get($this->get_entity_permission()))
-				)
+				$row = $this->auth_check($row);
+				if ($row)
 				{
-					continue;
+					$this->result[$row[$this->get_entity_name()]] = $row;
 				}
-				$this->result[$row[$this->get_entity_name()]] = $row;
 			}
 			$this->db->sql_freeresult($result);
 
@@ -114,5 +110,5 @@ abstract class buffer
 
 	protected abstract function get_entity_name();
 	protected abstract function get_entity_fields();
-	protected abstract function get_entity_permission();
+	protected abstract function auth_check($row);
 }

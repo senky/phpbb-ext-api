@@ -26,4 +26,16 @@ class user_buffer extends buffer
 	{
 		return 'u_viewprofile';
 	}
+
+	protected function auth_check($row)
+	{
+		if (!$this->auth->acl_get('u_viewprofile')) {
+			return array_intersect_key($row, array_flip([
+				'user_id',
+				'username',
+				'user_colour',
+			]));
+		}
+		return $row;
+	}
 }
