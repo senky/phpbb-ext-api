@@ -81,6 +81,14 @@ class forum_type extends type
 							return $context->resolver->resolve($row, $args, $context, $info);
 						},
 					],
+					'last_post'	=> [
+						'needs_translation'	=> true,
+						'type'				=> types::post(),
+						'resolve'			=> function($row, $args, $context, ResolveInfo $info) {
+							$row['post_id'] = $row['forum_last_post_id'];
+							return $context->resolver->resolve($row, $args, $context, $info);
+						},
+					],
 				];
 			}
 		];
