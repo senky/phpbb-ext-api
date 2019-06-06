@@ -15,6 +15,7 @@ use GraphQL\Type\Definition\Type;
 class types
 {
 	private static $forum;
+	private static $group;
 	private static $post;
 	private static $statistics;
 	private static $topic;

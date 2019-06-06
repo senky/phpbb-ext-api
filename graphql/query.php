@@ -21,6 +21,7 @@ class query extends ObjectType
 		$config = [
 			'name'		=> 'Query',
 			'fields'	=> [
+				// forum types
 				'forum'	=> [
 					'type'	=> types::forum(),
 					'args'	=> [
@@ -33,19 +34,22 @@ class query extends ObjectType
 						'forum_ids'	=> types::listOf(types::id()),
 					],
 				],
-				'topic'	=> [
-					'type'	=> types::topic(),
+
+				// group types
+				'group'	=> [
+					'type'	=> types::group(),
 					'args'	=> [
-						'topic_id'	=> types::id(),
+						'group_id'	=> types::id(),
 					],
 				],
-				'topics'	=> [
-					'type'	=> types::listOf(types::topic()),
+				'groups'	=> [
+					'type'	=> types::listOf(types::group()),
 					'args'	=> [
-						'topic_ids'	=> types::listOf(types::id()),
-						'forum_id'	=> types::id(),
+						'group_ids'	=> types::listOf(types::id()),
 					],
 				],
+
+				// post types
 				'post'	=> [
 					'type'	=> types::post(),
 					'args'	=> [
@@ -59,6 +63,23 @@ class query extends ObjectType
 						'topic_id'	=> types::id(),
 					],
 				],
+
+				// topic types
+				'topic'	=> [
+					'type'	=> types::topic(),
+					'args'	=> [
+						'topic_id'	=> types::id(),
+					],
+				],
+				'topics'	=> [
+					'type'	=> types::listOf(types::topic()),
+					'args'	=> [
+						'topic_ids'	=> types::listOf(types::id()),
+						'forum_id'	=> types::id(),
+					],
+				],
+
+				// user types
 				'user'	=> [
 					'type'	=> types::user(),
 					'args'	=> [
@@ -74,6 +95,8 @@ class query extends ObjectType
 						'user_ids'	=> types::listOf(types::id()),
 					],
 				],
+
+				// special types
 				'statistics'	=> types::statistics(),
 			],
 			'resolveField'	=> [$resolver, 'resolve'],

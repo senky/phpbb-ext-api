@@ -10,26 +10,22 @@
 
 namespace senky\api\graphql\buffer;
 
-class user_buffer extends buffer
+class group_buffer extends buffer
 {
 	protected function get_entity_name()
 	{
-		return 'user_id';
+		return 'group_id';
 	}
 
 	protected function get_entity_fields()
 	{
-		return 'user_id';
+		return 'group_id';
 	}
 
 	protected function auth_check($row)
 	{
 		if (!$this->auth->acl_get('u_viewprofile')) {
-			return array_intersect_key($row, array_flip([
-				'user_id',
-				'username',
-				'user_colour',
-			]));
+			return false;
 		}
 		return $row;
 	}

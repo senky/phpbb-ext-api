@@ -6,6 +6,7 @@ services:
             - '@config'
             - '@senky.api.graphql.resolver'
             - '@senky.api.graphql.buffer.forum_buffer'
+            - '@senky.api.graphql.buffer.group_buffer'
             - '@senky.api.graphql.buffer.post_buffer'
             - '@senky.api.graphql.buffer.topic_buffer'
             - '@senky.api.graphql.buffer.user_buffer'
@@ -25,6 +26,13 @@ services:
             - '@dbal.conn'
             - '@auth'
             - '%tables.forums%'
+
+    senky.api.graphql.buffer.group_buffer:
+        class: senky\api\graphql\buffer\group_buffer
+        arguments:
+            - '@dbal.conn'
+            - '@auth'
+            - '%tables.groups%'
 
     senky.api.graphql.buffer.post_buffer:
         class: senky\api\graphql\buffer\post_buffer
