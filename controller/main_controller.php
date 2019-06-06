@@ -37,7 +37,6 @@ class main_controller
 			'context'	=> $this->context,
 			'debug'		=> Debug::INCLUDE_DEBUG_MESSAGE | Debug::INCLUDE_TRACE,
 		]);
-		$server->handleRequest();
-		die;
+		$server->handleRequest(null, true);
 	}
 }
