@@ -11,6 +11,7 @@
 namespace senky\api\graphql\type;
 
 use senky\api\graphql\type\types;
+use GraphQL\Type\Definition\ResolveInfo;
 
 class forum_type extends type
 {
@@ -70,6 +71,16 @@ class forum_type extends type
 					'forum_topics_approved'		=> types::int(),
 					'forum_topics_unapproved'	=> types::int(),
 					'forum_topics_softdeleted'	=> types::int(),
+
+					// additional fields
+					'parent'	=> [
+						'needs_translation'	=> true,
+						'type'				=> types::forum(),
+						'resolve'			=> function($row, $args, $context, ResolveInfo $info) {
+							$row['forum_id'] = $row['parent_id'];
+							return $context->resolver->resolve($row, $args, $context, $info);
+						},
+					],
 				];
 			}
 		];
