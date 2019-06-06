@@ -19,51 +19,66 @@ class statistics_type extends type
 	{
 		$this->definition = [
 			'name'			=> 'Statistics',
-			'fields'		=> [
-				'total_posts'	=> [
-					'type'		=> types::int(),
-					'resolve'	=> function($row, $args, $context) {
-						return (int) $context->config['num_posts'];
-					},
-				],
-				'total_topics'	=> [
-					'type'		=> types::int(),
-					'resolve'	=> function($row, $args, $context) {
-						return (int) $context->config['num_topics'];
-					},
-				],
-				'total_users'	=> [
-					'type'		=> types::int(),
-					'resolve'	=> function($row, $args, $context) {
-						return (int) $context->config['num_users'];
-					},
-				],
-				'newest_user'	=> [
-					'type'		=> types::user(),
-					'resolve'	=> function($row, $args, $context, ResolveInfo $info) {
-						$args['user_id'] = $context->config['newest_user_id'];
-						return $context->resolver->resolve($row, $args, $context, $info);
-					},
-				],
-				'online_registered'	=> [
-					'type'		=> types::int(),
-					'resolve'	=> function($row, $args, $context) {
-						return $this->obtain_users_online('visible_online', $context);
-					},
-				],
-				'online_hidden'	=> [
-					'type'		=> types::int(),
-					'resolve'	=> function($row, $args, $context) {
-						return $this->obtain_users_online('hidden_online', $context);
-					},
-				],
-				'online_guests'	=> [
-					'type'		=> types::int(),
-					'resolve'	=> function($row, $args, $context) {
-						return $this->obtain_users_online('guests_online', $context);
-					},
-				]
-			],
+			'fields'		=> function() {
+				return [
+					'total_posts'	=> [
+						'type'		=> types::int(),
+						'resolve'	=> function($row, $args, $context) {
+							return (int) $context->config['num_posts'];
+						},
+					],
+					'total_topics'	=> [
+						'type'		=> types::int(),
+						'resolve'	=> function($row, $args, $context) {
+							return (int) $context->config['num_topics'];
+						},
+					],
+					'total_users'	=> [
+						'type'		=> types::int(),
+						'resolve'	=> function($row, $args, $context) {
+							return (int) $context->config['num_users'];
+						},
+					],
+					'newest_user'	=> [
+						'needs_translation'	=> true,
+						'type'				=> types::user(),
+						'resolve'			=> function($row, $args, $context, ResolveInfo $info) {
+							$args['user_id'] = $context->config['newest_user_id'];
+							return $context->resolver->resolve($row, $args, $context, $info);
+						},
+					],
+					'online_registered'	=> [
+						'type'		=> types::int(),
+						'resolve'	=> function($row, $args, $context) {
+							return $this->obtain_users_online('visible_online', $context);
+						},
+					],
+					'online_hidden'	=> [
+						'type'		=> types::int(),
+						'resolve'	=> function($row, $args, $context) {
+							return $this->obtain_users_online('hidden_online', $context);
+						},
+					],
+					'online_guests'	=> [
+						'type'		=> types::int(),
+						'resolve'	=> function($row, $args, $context) {
+							return $this->obtain_users_online('guests_online', $context);
+						},
+					],
+					'online_record'	=> [
+						'type'		=> types::int(),
+						'resolve'	=> function($row, $args, $context) {
+							return (int) $context->config['record_online_users'];
+						},
+					],
+					'online_record_time'	=> [
+						'type'		=> types::int(),
+						'resolve'	=> function($row, $args, $context) {
+							return (int) $context->config['record_online_date'];
+						},
+					],
+				];
+			}
 		];
 		parent::__construct($this->definition);
 	}

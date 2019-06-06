@@ -44,9 +44,9 @@ class group_type extends type
 	
 					// additional fields
 					'members'	=> [
-						'additional'	=> true,
-						'type'			=> types::listOf(types::user()),
-						'resolve'		=> function($row, $args, $context, ResolveInfo $info) {
+						'needs_translation'	=> true,
+						'type'				=> types::listOf(types::user()),
+						'resolve'			=> function($row, $args, $context, ResolveInfo $info) {
 							$context->user_group_buffer->add($row['group_id'], 'group_id');
 	
 							return new \GraphQL\Deferred(function() use ($row, $args, $context, $info) {

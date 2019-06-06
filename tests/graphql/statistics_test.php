@@ -23,9 +23,11 @@ class statistics_test extends \senky\api\tests\graphql_test_case
 	public function test_simple_statistics()
 	{
 		$data = [
-			'total_posts'	=> (int) $this->phpbb_config['num_posts'],
-			'total_topics'	=> (int) $this->phpbb_config['num_topics'],
-			'total_users'	=> (int) $this->phpbb_config['num_users'],
+			'total_posts'			=> (int) $this->phpbb_config['num_posts'],
+			'total_topics'			=> (int) $this->phpbb_config['num_topics'],
+			'total_users'			=> (int) $this->phpbb_config['num_users'],
+			'online_record'			=> (int) $this->phpbb_config['record_online_users'],
+			'online_record_time'	=> (int) $this->phpbb_config['record_online_date'],
 		];
 
 		foreach ($data as $key => $value)

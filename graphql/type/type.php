@@ -48,7 +48,7 @@ class type extends ObjectType
 	public function translate_field_name($field)
 	{
 		$fields = $this->get_fields();
-		if (empty($fields[$field]['additional']))
+		if (empty($fields[$field]['needs_translation']))
 		{
 			return $field;
 		}

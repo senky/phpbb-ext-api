@@ -20,70 +20,71 @@ class post_type extends type
 		$this->definition = [
 			'name'			=> 'Post',
 			'needs_buffer'	=> true,
-			'fields'		=> [
-				'post_id'				=> types::id(),
-				'topic_id'				=> types::id(),
-				'forum_id'				=> types::id(),
-				'poster_id'				=> types::id(),
-				'icon_id'				=> types::id(),
-				'poster_ip'				=> types::string(),
-				'post_time'				=> types::int(),
-				'post_reported'			=> types::boolean(),
-				'enable_bbcode'			=> types::boolean(),
-				'enable_smilies'		=> types::boolean(),
-				'enable_magic_url'		=> types::boolean(),
-				'enable_sig'			=> types::boolean(),
-				'post_username'			=> types::string(),
-				'post_subject'			=> types::string(),
-				'post_text'				=> types::string(),
-				'post_checksum'			=> types::string(),
-				'post_attachment'		=> types::boolean(),
-				'bbcode_bitfield'		=> types::string(),
-				'bbcode_uid'			=> types::string(),
-				'post_postcount'		=> types::boolean(),
-				'post_edit_time'		=> types::int(),
-				'post_edit_reason'		=> types::string(),
-				'post_edit_user'		=> types::id(),
-				'post_edit_count'		=> types::int(),
-				'post_edit_locked'		=> types::boolean(),
-				'post_visibility'		=> types::int(),
-				'post_delete_time'		=> types::int(),
-				'post_delete_reason'	=> types::string(),
-				'post_delete_user'		=> types::id(),
-
-				// additional fields
-				'post_html'	=> [
-					'additional'		=> true,
-					'type'				=> types::string(),
-					'requires_fields'	=> ['post_text', 'bbcode_uid', 'bbcode_bitfield'],
-					'resolve'			=> function($row, $args, $context, ResolveInfo $info) {
-						return generate_text_for_display($row['post_text'], $row['bbcode_uid'], $row['bbcode_bitfield'], ($row['bbcode_bitfield'] ? OPTION_FLAG_BBCODE : 0) | OPTION_FLAG_SMILIES);
-					},
-					
-				],
-				'topic'	=> [
-					'additional'	=> true,
-					'type'			=> types::topic(),
-					'resolve'		=> function($row, $args, $context, ResolveInfo $info) {
-						return $context->resolver->resolve($row, $args, $context, $info);
-					},
-				],
-				'forum'	=> [
-					'additional'	=> true,
-					'type'			=> types::forum(),
-					'resolve'		=> function($row, $args, $context, ResolveInfo $info) {
-						return $context->resolver->resolve($row, $args, $context, $info);
-					},
-				],
-				'poster'	=> [
-					'additional'	=> true,
-					'type'			=> types::user(),
-					'resolve'		=> function($row, $args, $context, ResolveInfo $info) {
-						$row['user_id'] = $row['poster_id'];
-						return $context->resolver->resolve($row, $args, $context, $info);
-					},
-				],
-			],
+			'fields'		=> function() {
+				return [
+					'post_id'				=> types::id(),
+					'topic_id'				=> types::id(),
+					'forum_id'				=> types::id(),
+					'poster_id'				=> types::id(),
+					'icon_id'				=> types::id(),
+					'poster_ip'				=> types::string(),
+					'post_time'				=> types::int(),
+					'post_reported'			=> types::boolean(),
+					'enable_bbcode'			=> types::boolean(),
+					'enable_smilies'		=> types::boolean(),
+					'enable_magic_url'		=> types::boolean(),
+					'enable_sig'			=> types::boolean(),
+					'post_username'			=> types::string(),
+					'post_subject'			=> types::string(),
+					'post_text'				=> types::string(),
+					'post_checksum'			=> types::string(),
+					'post_attachment'		=> types::boolean(),
+					'bbcode_bitfield'		=> types::string(),
+					'bbcode_uid'			=> types::string(),
+					'post_postcount'		=> types::boolean(),
+					'post_edit_time'		=> types::int(),
+					'post_edit_reason'		=> types::string(),
+					'post_edit_user'		=> types::id(),
+					'post_edit_count'		=> types::int(),
+					'post_edit_locked'		=> types::boolean(),
+					'post_visibility'		=> types::int(),
+					'post_delete_time'		=> types::int(),
+					'post_delete_reason'	=> types::string(),
+					'post_delete_user'		=> types::id(),
+	
+					// additional fields
+					'post_html'	=> [
+						'type'				=> types::string(),
+						'requires_fields'	=> ['post_text', 'bbcode_uid', 'bbcode_bitfield'],
+						'resolve'			=> function($row, $args, $context, ResolveInfo $info) {
+							return generate_text_for_display($row['post_text'], $row['bbcode_uid'], $row['bbcode_bitfield'], ($row['bbcode_bitfield'] ? OPTION_FLAG_BBCODE : 0) | OPTION_FLAG_SMILIES);
+						},
+						
+					],
+					'topic'	=> [
+						'needs_translation'	=> true,
+						'type'				=> types::topic(),
+						'resolve'			=> function($row, $args, $context, ResolveInfo $info) {
+							return $context->resolver->resolve($row, $args, $context, $info);
+						},
+					],
+					'forum'	=> [
+						'needs_translation'	=> true,
+						'type'				=> types::forum(),
+						'resolve'			=> function($row, $args, $context, ResolveInfo $info) {
+							return $context->resolver->resolve($row, $args, $context, $info);
+						},
+					],
+					'poster'	=> [
+						'needs_translation'	=> true,
+						'type'				=> types::user(),
+						'resolve'			=> function($row, $args, $context, ResolveInfo $info) {
+							$row['user_id'] = $row['poster_id'];
+							return $context->resolver->resolve($row, $args, $context, $info);
+						},
+					],
+				];
+			}
 		];
 		parent::__construct($this->definition);
 	}
