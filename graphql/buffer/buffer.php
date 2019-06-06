@@ -19,11 +19,13 @@ abstract class buffer
 
 	protected $db;
 	protected $auth;
+	protected $config;
 	protected $table;
-	public function __construct(\phpbb\db\driver\driver_interface $db, \phpbb\auth\auth $auth, $table)
+	public function __construct(\phpbb\db\driver\driver_interface $db, \phpbb\auth\auth $auth, \phpbb\config\config $config, $table)
 	{
 		$this->db = $db;
 		$this->auth = $auth;
+		$this->config = $config;
 		$this->table = $table;
 	}
 
@@ -57,9 +59,9 @@ abstract class buffer
 		return $this->result[$entity_id] ?? null;
 	}
 
-	public function get_all($ids = null)
+	public function get_all($start, $ids = null)
 	{
-		$this->load();
+		$this->load($start);
 
 		if (empty($ids))
 		{
@@ -74,7 +76,7 @@ abstract class buffer
 		return '';
 	}
 
-	protected function load()
+	protected function load($start = 0)
 	{
 		if (empty($this->result))
 		{
@@ -97,7 +99,7 @@ abstract class buffer
 				$sql .= ' WHERE ' . implode(' AND ', $where);
 			}
 
-			$result = $this->db->sql_query($sql);
+			$result = $this->db->sql_query_limit($sql, $this->config[$this->get_limit_setting()], $start, );
 			while ($row = $this->db->sql_fetchrow($result))
 			{
 				$row = $this->auth_check($row);
@@ -121,4 +123,5 @@ abstract class buffer
 
 	protected abstract function get_entity_name();
 	protected abstract function get_entity_fields();
+	protected abstract function get_limit_setting();
 }

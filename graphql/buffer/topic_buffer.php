@@ -26,6 +26,11 @@ class topic_buffer extends buffer
 	{
 		return 'topic_id, forum_id';
 	}
+
+	protected function get_limit_setting()
+	{
+		return 'topics_per_page';
+	}
 	
 	protected function auth_check($row)
 	{

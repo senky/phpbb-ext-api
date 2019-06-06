@@ -21,7 +21,19 @@ class context
 	public $topic_buffer;
 	public $user_buffer;
 	public $user_group_buffer;
-	public function __construct(\phpbb\db\driver\driver_interface $db, \phpbb\config\config $config, \senky\api\graphql\resolver $resolver, \senky\api\graphql\buffer\forum_buffer $forum_buffer, \senky\api\graphql\buffer\group_buffer $group_buffer, \senky\api\graphql\buffer\post_buffer $post_buffer, \senky\api\graphql\buffer\topic_buffer $topic_buffer, \senky\api\graphql\buffer\user_buffer $user_buffer, \senky\api\graphql\buffer\user_group_buffer $user_group_buffer)
+	public $forums_table;
+	public function __construct(
+		\phpbb\db\driver\driver_interface $db,
+		\phpbb\config\config $config,
+		\senky\api\graphql\resolver $resolver,
+		\senky\api\graphql\buffer\forum_buffer $forum_buffer,
+		\senky\api\graphql\buffer\group_buffer $group_buffer,
+		\senky\api\graphql\buffer\post_buffer $post_buffer,
+		\senky\api\graphql\buffer\topic_buffer $topic_buffer,
+		\senky\api\graphql\buffer\user_buffer $user_buffer,
+		\senky\api\graphql\buffer\user_group_buffer $user_group_buffer,
+		$forums_table
+	)
 	{
 		$this->db = $db;
 		$this->config = $config;
@@ -32,5 +44,6 @@ class context
 		$this->topic_buffer = $topic_buffer;
 		$this->user_buffer = $user_buffer;
 		$this->user_group_buffer = $user_group_buffer;
+		$this->forums_table = $forums_table;
 	}
 }

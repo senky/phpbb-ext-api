@@ -11,6 +11,7 @@ services:
             - '@senky.api.graphql.buffer.topic_buffer'
             - '@senky.api.graphql.buffer.user_buffer'
             - '@senky.api.graphql.buffer.user_group_buffer'
+            - '%tables.forums%'
 
     senky.api.graphql.resolver:
         class: senky\api\graphql\resolver
@@ -26,6 +27,7 @@ services:
         arguments:
             - '@dbal.conn'
             - '@auth'
+            - '@config'
             - '%tables.forums%'
 
     senky.api.graphql.buffer.group_buffer:
@@ -33,6 +35,7 @@ services:
         arguments:
             - '@dbal.conn'
             - '@auth'
+            - '@config'
             - '%tables.groups%'
 
     senky.api.graphql.buffer.post_buffer:
@@ -40,6 +43,7 @@ services:
         arguments:
             - '@dbal.conn'
             - '@auth'
+            - '@config'
             - '%tables.posts%'
 
     senky.api.graphql.buffer.topic_buffer:
@@ -47,6 +51,7 @@ services:
         arguments:
             - '@dbal.conn'
             - '@auth'
+            - '@config'
             - '%tables.topics%'
 
     senky.api.graphql.buffer.user_buffer:
@@ -54,6 +59,7 @@ services:
         arguments:
             - '@dbal.conn'
             - '@auth'
+            - '@config'
             - '%tables.users%'
 
     senky.api.graphql.buffer.user_group_buffer:
@@ -61,4 +67,5 @@ services:
         arguments:
             - '@dbal.conn'
             - '@auth'
+            - '@config'
             - '%tables.user_group%'

@@ -78,8 +78,9 @@ class resolver
 			$context->{$type . '_buffer'}->add_parent($args[$parent_name]);
 		}
 
-		return new \GraphQL\Deferred(function() use ($type, $context, $ids) {
-			return $context->{$type . '_buffer'}->get_all($ids);
+		$start = $args['start'] ?? 0;
+		return new \GraphQL\Deferred(function() use ($type, $context, $start, $ids) {
+			return $context->{$type . '_buffer'}->get_all($start, $ids);
 		});
 	}
 

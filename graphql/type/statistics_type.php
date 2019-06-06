@@ -33,6 +33,17 @@ class statistics_type extends type
 							return (int) $context->config['num_topics'];
 						},
 					],
+					'total_forums'	=> [
+						'type'		=> types::int(),
+						'resolve'	=> function($row, $args, $context) {
+							$sql = 'SELECT COUNT(forum_id) as total_forums
+								FROM ' . $context->forums_table;
+							$result = $context->db->sql_query($sql);
+							$total_forums = (int) $context->db->sql_fetchfield('total_forums', $result);
+							$context->db->sql_freeresult($result);
+							return $total_forums;
+						},
+					],
 					'total_users'	=> [
 						'type'		=> types::int(),
 						'resolve'	=> function($row, $args, $context) {

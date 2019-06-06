@@ -93,6 +93,10 @@ class query extends ObjectType
 					'type'	=> types::listOf(types::user()),
 					'args'	=> [
 						'user_ids'	=> types::listOf(types::id()),
+						'start'		=> [
+							'type'			=> types::int(),
+							'defaultValue'	=> 0,
+						],
 					],
 				],
 

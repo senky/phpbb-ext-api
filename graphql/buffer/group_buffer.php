@@ -22,6 +22,11 @@ class group_buffer extends buffer
 		return 'group_id';
 	}
 
+	protected function get_limit_setting()
+	{
+		return 'topics_per_page';
+	}
+
 	protected function auth_check($row)
 	{
 		if (!$this->auth->acl_get('u_viewprofile')) {
