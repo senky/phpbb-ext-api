@@ -10,11 +10,11 @@
 
 namespace senky\api\graphql\buffer;
 
-abstract class buffer
+abstract class junction_buffer
 {
 	protected $entity_ids = [];
+	protected $entity_key;
 	protected $fields = [];
-	protected $parent_id = 0;
 	protected $result = [];
 
 	protected $db;
@@ -27,11 +27,13 @@ abstract class buffer
 		$this->table = $table;
 	}
 
-	public function add($entity_id, $fields = [])
+	public function add($entity_id, $entity_key, $fields = [])
 	{
 		if (!in_array($entity_id, $this->entity_ids))
 		{
-			// add new forum
+			$this->entity_key = $entity_key;
+
+			// add new entity
 			$this->entity_ids[] = $entity_id;
 
 			$this->add_fields($fields);
@@ -46,79 +48,36 @@ abstract class buffer
 		$this->fields += $fields;
 	}
 
-	public function add_parent($parent_id)
-	{
-		$this->parent_id = $parent_id;
-	}
-
-	public function get($entity_id)
+	public function get($entity_id, $entity_key)
 	{
 		$this->load();
-		return $this->result[$entity_id] ?? null;
-	}
-
-	public function get_all($ids = null)
-	{
-		$this->load();
-
-		if (empty($ids))
-		{
-			return $this->result;
-		}
-
-		return array_intersect_key($this->result, array_flip($ids));
-	}
-
-	public function get_parent_name()
-	{
-		return '';
+		return !empty($this->result[$entity_id]) ? array_column($this->result[$entity_id], $entity_key) : null;
 	}
 
 	protected function load()
 	{
 		if (empty($this->result))
 		{
-			$where = [];
 			$fields = implode(',', $this->fields);
 			$sql = 'SELECT ' . $this->get_entity_fields() . ($fields ? ',' . $fields : '') . '
 				FROM ' . $this->table;
 			
 			if (!empty($this->entity_ids))
 			{
-				$where[] = $this->db->sql_in_set($this->get_entity_name(), $this->entity_ids);
-			}
-			if ($this->parent_id !== 0)
-			{
-				$where[] = $this->get_parent_name() . ' = ' . (int) $this->parent_id;
-			}
-
-			if (!empty($where))
-			{
-				$sql .= ' WHERE ' . implode(' AND ', $where);
+				$sql .= ' WHERE ' . $this->db->sql_in_set($this->entity_key, $this->entity_ids);
 			}
 
 			$result = $this->db->sql_query($sql);
 			while ($row = $this->db->sql_fetchrow($result))
 			{
-				$row = $this->auth_check($row);
-				if ($row)
-				{
-					$this->result[$row[$this->get_entity_name()]] = $row;
-				}
+				$this->result[$row[$this->entity_key]][] = $row;
 			}
 			$this->db->sql_freeresult($result);
 
 			// reset fields - next query won't fetch unnecessary fields this way; do the same for parent ID
 			$this->fields = [];
-			$this->parent_id = 0;
 		}
 	}
 
-	protected function auth_check($row)
-	{
-		return $row;
-	}
-
-	protected abstract function get_entity_name();
 	protected abstract function get_entity_fields();
 }

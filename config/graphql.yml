@@ -10,6 +10,7 @@ services:
             - '@senky.api.graphql.buffer.post_buffer'
             - '@senky.api.graphql.buffer.topic_buffer'
             - '@senky.api.graphql.buffer.user_buffer'
+            - '@senky.api.graphql.buffer.user_group_buffer'
 
     senky.api.graphql.resolver:
         class: senky\api\graphql\resolver
@@ -54,3 +55,10 @@ services:
             - '@dbal.conn'
             - '@auth'
             - '%tables.users%'
+
+    senky.api.graphql.buffer.user_group_buffer:
+        class: senky\api\graphql\buffer\user_group_buffer
+        arguments:
+            - '@dbal.conn'
+            - '@auth'
+            - '%tables.user_group%'

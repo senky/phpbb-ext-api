@@ -11,6 +11,7 @@
 namespace senky\api\graphql\type;
 
 use senky\api\graphql\type\types;
+use GraphQL\Type\Definition\ResolveInfo;
 
 class user_type extends type
 {
@@ -86,6 +87,22 @@ class user_type extends type
 				'user_new'					=> types::boolean(),
 				'user_reminded'				=> types::int(),
 				'user_reminded_time'		=> types::int(),
+
+				// additional fields
+				'groups'	=> [
+					'type'		=> types::listOf(types::group()),
+					'resolve'	=> function($row, $args, $context, ResolveInfo $info) {
+						$context->user_group_buffer->add($row['user_id'], 'user_id');
+
+						return new \GraphQL\Deferred(function() use ($row, $args, $context, $info) {
+							$row['group_ids'] = $context->user_group_buffer->get($row['user_id'], 'group_id');
+
+							return $context->resolver->resolve($row, $args, $context, $info);
+						});
+						
+					},
+					
+				],
 			],
 		];
 		parent::__construct($this->definition);

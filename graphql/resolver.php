@@ -61,11 +61,13 @@ class resolver
 		$context->{$type . '_buffer'}->add_fields($fields);
 
 		// maybe user specified IDs
+		$ids = [];
 		if (!empty($args[$type . '_ids']))
 		{
 			foreach ($args[$type . '_ids'] as $user_id)
 			{
 				$context->{$type . '_buffer'}->add($user_id);
+				$ids[] = $user_id;
 			}
 		}
 
@@ -76,8 +78,8 @@ class resolver
 			$context->{$type . '_buffer'}->add_parent($args[$parent_name]);
 		}
 
-		return new \GraphQL\Deferred(function() use ($type, $context) {
-			return $context->{$type . '_buffer'}->get_all();
+		return new \GraphQL\Deferred(function() use ($type, $context, $ids) {
+			return $context->{$type . '_buffer'}->get_all($ids);
 		});
 	}
 
