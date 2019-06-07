@@ -10,12 +10,10 @@
 
 namespace senky\api;
 
-/**
- * phpBB API Extension base
- *
- * It is recommended to remove this file from
- * an extension if it is not going to be used.
- */
 class ext extends \phpbb\extension\base
 {
+	public function is_enableable()
+	{
+		return phpbb_version_compare(PHP_VERSION, '7.1', '>=');
+	}
 }
