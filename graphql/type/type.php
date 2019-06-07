@@ -30,7 +30,7 @@ class type extends ObjectType
 		$additional_fields = [];
 		foreach ($requested_fields as $field)
 		{
-			if (is_array($fields[$field]) && !empty($fields[$field]['requires_fields']))
+			if (gettype($fields[$field]) === 'array' && !empty($fields[$field]['requires_fields']))
 			{
 				$additional_fields += $fields[$field]['requires_fields'];
 			}
@@ -44,19 +44,19 @@ class type extends ObjectType
 	 * @param [string] $fields Requested fields
 	 * @return [string] Cleaned fields
 	 */
-	public function clean_fields($fields)
+	public function clean_fields($requested_fields)
 	{
 		$fields = $this->get_fields();
-		foreach ($fields as $field_name => $field_type)
+		foreach ($requested_fields as $field_name => $_)
 		{
 			// we need to remove additional fields. Only they are of array type.
-			if (is_array($field_type))
+			if (gettype($fields[$field_name]) === 'array')
 			{
-				unset($fields[$field_name]);
+				unset($requested_fields[$field_name]);
 			}
 		}
 
-		return $fields;
+		return $requested_fields;
 	}
 
 	protected function get_fields()

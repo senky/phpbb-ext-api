@@ -89,6 +89,12 @@ class forum_type extends type
 							return $context->resolver->resolve($row, $args, $context, $info);
 						},
 					],
+					'topics'	=> [
+						'type'		=> types::listOf(types::topic()),
+						'resolve'	=> function($row, $args, $context, ResolveInfo $info) {
+							return $context->resolver->resolve($row, $args, $context, $info);
+						},
+					]
 				];
 			}
 		];

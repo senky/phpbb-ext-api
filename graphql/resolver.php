@@ -66,15 +66,17 @@ class resolver
 		}
 
 		// or maybe user specified parent ID
+		$parent = 0;
 		$parent_name = $context->{$type . '_buffer'}->get_parent_name();
 		if (!empty($args[$parent_name]))
 		{
+			$parent = $args[$parent_name];
 			$context->{$type . '_buffer'}->add_parent($args[$parent_name]);
 		}
 
 		$start = $args['start'] ?? 0;
-		return new \GraphQL\Deferred(function() use ($type, $context, $start, $ids) {
-			return $context->{$type . '_buffer'}->get_all($start, $ids);
+		return new \GraphQL\Deferred(function() use ($type, $context, $start, $ids, $parent) {
+			return $context->{$type . '_buffer'}->get_all($start, $ids, $parent);
 		});
 	}
 

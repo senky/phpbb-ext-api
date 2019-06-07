@@ -59,13 +59,20 @@ abstract class buffer
 		return $this->result[$entity_id] ?? null;
 	}
 
-	public function get_all($start, $ids = null)
+	public function get_all($start, $ids = null, $parent = 0)
 	{
 		$this->load($start);
 
 		if (empty($ids))
 		{
-			return $this->result;
+			if (empty($parent))
+			{
+				return $this->result;
+			}
+			
+			return array_filter($this->result, function($entity) use ($parent) {
+				return $entity[$this->get_parent_name()] === $parent;
+			});
 		}
 
 		return array_intersect_key($this->result, array_flip($ids));
