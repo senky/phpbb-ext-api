@@ -1,11 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "hash": "fbd7389040c7ca2dc3409a2806a68b76",
-    "content-hash": "9b1d6446249c0a46de499ee16562bc0e",
+    "content-hash": "a8693829a5644adc1b8ab0b9c1e9db7f",
     "packages": [
         {
             "name": "composer/installers",
@@ -125,20 +124,20 @@
                 "zend",
                 "zikula"
             ],
-            "time": "2018-08-27 06:10:37"
+            "time": "2018-08-27T06:10:37+00:00"
         },
         {
             "name": "webonyx/graphql-php",
-            "version": "v0.13.1",
+            "version": "v0.13.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/webonyx/graphql-php.git",
-                "reference": "0226b08429e5a102ea99cda9ddc4a7185006473f"
+                "reference": "e55c7d72cb2d852322ebad8ce30705ae90f20717"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webonyx/graphql-php/zipball/0226b08429e5a102ea99cda9ddc4a7185006473f",
-                "reference": "0226b08429e5a102ea99cda9ddc4a7185006473f",
+                "url": "https://api.github.com/repos/webonyx/graphql-php/zipball/e55c7d72cb2d852322ebad8ce30705ae90f20717",
+                "reference": "e55c7d72cb2d852322ebad8ce30705ae90f20717",
                 "shasum": ""
             },
             "require": {
@@ -147,11 +146,11 @@
                 "php": "^7.1||^8.0"
             },
             "require-dev": {
-                "doctrine/coding-standard": "^5.0",
+                "doctrine/coding-standard": "^6.0",
                 "phpbench/phpbench": "^0.14.0",
-                "phpstan/phpstan": "0.10.5",
-                "phpstan/phpstan-phpunit": "0.10.0",
-                "phpstan/phpstan-strict-rules": "0.10.1",
+                "phpstan/phpstan": "^0.11.4",
+                "phpstan/phpstan-phpunit": "^0.11.0",
+                "phpstan/phpstan-strict-rules": "^0.11.0",
                 "phpunit/phpcov": "^5.0",
                 "phpunit/phpunit": "^7.2",
                 "psr/http-message": "^1.0",
@@ -177,7 +176,7 @@
                 "api",
                 "graphql"
             ],
-            "time": "2019-03-09 15:34:29"
+            "time": "2019-05-13T07:12:05+00:00"
         }
     ],
     "packages-dev": [
@@ -232,7 +231,7 @@
                 "task",
                 "tool"
             ],
-            "time": "2012-11-29 21:23:47"
+            "time": "2012-11-29T21:23:47+00:00"
         }
     ],
     "aliases": [],
@@ -241,7 +240,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=5.4"
+        "php": ">=7.1"
     },
     "platform-dev": []
 }
