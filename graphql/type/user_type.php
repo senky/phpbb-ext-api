@@ -91,7 +91,6 @@ class user_type extends type
 	
 					// additional fields
 					'groups'	=> [
-						'needs_translation'	=> true,
 						'type'				=> types::listOf(types::group()),
 						'resolve'			=> function($row, $args, $context, ResolveInfo $info) {
 							$context->user_group_buffer->add($row['user_id'], 'user_id');
@@ -105,7 +104,6 @@ class user_type extends type
 						},
 					],
 					'rank'	=> [
-						'needs_translation'	=> true,
 						'type'				=> types::rank(),
 						'resolve'			=> function($row, $args, $context, ResolveInfo $info) {
 							$row['rank_id'] = $row['user_rank'];

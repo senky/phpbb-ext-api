@@ -62,6 +62,7 @@ class mutation extends type\type
 						];
 						$redirect_url = \submit_post('post', $args['subject'], $user->data['username'], 0, $poll_ary, $data_ary);
 
+						$info->fieldName = 'topic';
 						$args['topic_id'] =  $this->extract_topic_id($redirect_url);
 						return $context->resolver->resolve($row, $args, $context, $info);
 					},
@@ -69,14 +70,6 @@ class mutation extends type\type
 			],
 		];
 		parent::__construct($config);
-	}
-
-	public function translate_field_name($field)
-	{
-		$translator = [
-			'createTopic'	=> 'topic',
-		];
-		return $translator[$field];
 	}
 
 	protected function extract_topic_id($redirect_url)

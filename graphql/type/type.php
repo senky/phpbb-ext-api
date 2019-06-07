@@ -39,35 +39,6 @@ class type extends ObjectType
 	}
 
 	/**
-	 * Translate additional fields type when name doesn't match.
-	 * This happens sometimes for clarity. E.g. 'poster' is in fact of 'user' type.
-	 *
-	 * @param string $field Field to be translated
-	 * @return string Translated field
-	 */
-	public function translate_field_name($field)
-	{
-		$fields = $this->get_fields();
-		if (empty($fields[$field]['needs_translation']))
-		{
-			return $field;
-		}
-
-		$plural = false;
-		$class = $fields[$field]['type'];
-		if (method_exists($class, 'getWrappedType'))
-		{
-			$plural = true;
-			$class = $class->getWrappedType();
-		}
-
-		$class_full = get_class($class);
-		$class_parts = explode('\\', $class_full);
-		$class_name = end($class_parts);
-		return substr($class_name, 0, -5) . ($plural ? 's' : '');
-	}
-
-	/**
 	 * Cleans fields from additional fields (not present in DB).
 	 *
 	 * @param [string] $fields Requested fields

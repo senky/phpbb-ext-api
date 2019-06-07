@@ -25,12 +25,6 @@ class resolver
 			return [];
 		}
 
-		// translate field to correct type. E.g. poster -> user.
-		if (method_exists($info->parentType, 'translate_field_name'))
-		{
-			$info->fieldName = $info->parentType->translate_field_name($info->fieldName);
-		}
-
 		// decide whether we are going to fetch multiple rows or just one
 		$is_multiple = substr($info->fieldName, -1) === 's';
 

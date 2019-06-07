@@ -63,24 +63,23 @@ class topic_type extends type
 	
 					// additional fields
 					'forum'	=> [
-						'needs_translation'	=> true,
 						'type'				=> types::forum(),
 						'resolve'			=> function($row, $args, $context, ResolveInfo $info) {
 							return $context->resolver->resolve($row, $args, $context, $info);
 						},
 					],
 					'first_post'	=> [
-						'needs_translation'	=> true,
 						'type'				=> types::post(),
 						'resolve'			=> function($row, $args, $context, ResolveInfo $info) {
+							$info->fieldName = 'post';
 							$row['post_id'] = $row['topic_first_post_id'];
 							return $context->resolver->resolve($row, $args, $context, $info);
 						},
 					],
 					'last_post'	=> [
-						'needs_translation'	=> true,
 						'type'				=> types::post(),
 						'resolve'			=> function($row, $args, $context, ResolveInfo $info) {
+							$info->fieldName = 'post';
 							$row['post_id'] = $row['topic_last_post_id'];
 							return $context->resolver->resolve($row, $args, $context, $info);
 						},

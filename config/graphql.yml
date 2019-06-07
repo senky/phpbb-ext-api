@@ -102,5 +102,4 @@ services:
         arguments:
             - '@dbal.conn'
             - '@auth'
-            - '@config'
             - '%tables.user_group%'

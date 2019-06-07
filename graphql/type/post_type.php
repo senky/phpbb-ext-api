@@ -62,23 +62,21 @@ class post_type extends type
 						
 					],
 					'topic'	=> [
-						'needs_translation'	=> true,
 						'type'				=> types::topic(),
 						'resolve'			=> function($row, $args, $context, ResolveInfo $info) {
 							return $context->resolver->resolve($row, $args, $context, $info);
 						},
 					],
 					'forum'	=> [
-						'needs_translation'	=> true,
 						'type'				=> types::forum(),
 						'resolve'			=> function($row, $args, $context, ResolveInfo $info) {
 							return $context->resolver->resolve($row, $args, $context, $info);
 						},
 					],
 					'poster'	=> [
-						'needs_translation'	=> true,
 						'type'				=> types::user(),
 						'resolve'			=> function($row, $args, $context, ResolveInfo $info) {
+							$info->fieldName = 'user';
 							$row['user_id'] = $row['poster_id'];
 							return $context->resolver->resolve($row, $args, $context, $info);
 						},

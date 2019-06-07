@@ -51,9 +51,9 @@ class statistics_type extends type
 						},
 					],
 					'newest_user'	=> [
-						'needs_translation'	=> true,
 						'type'				=> types::user(),
 						'resolve'			=> function($row, $args, $context, ResolveInfo $info) {
+							$info->fieldName = 'user';
 							$args['user_id'] = $context->config['newest_user_id'];
 							return $context->resolver->resolve($row, $args, $context, $info);
 						},
