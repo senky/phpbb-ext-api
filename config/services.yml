@@ -6,6 +6,9 @@ services:
         class: senky\api\controller\main_controller
         arguments:
             - '@request'
+            - '@dbal.conn'
+            - '@config'
+            - '@user'
             - '@senky.api.graphql.context'
             - '@senky.api.graphql.query'
             - '@senky.api.graphql.mutation'
