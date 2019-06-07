@@ -18,6 +18,7 @@ class types
 	private static $group;
 	private static $icon;
 	private static $post;
+	private static $smilie;
 	private static $statistics;
 	private static $topic;
 	private static $user;

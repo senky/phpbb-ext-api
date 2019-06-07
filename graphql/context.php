@@ -30,6 +30,7 @@ class context
 		\senky\api\graphql\buffer\group_buffer $group_buffer,
 		\senky\api\graphql\buffer\icon_buffer $icon_buffer,
 		\senky\api\graphql\buffer\post_buffer $post_buffer,
+		\senky\api\graphql\buffer\smilie_buffer $smilie_buffer,
 		\senky\api\graphql\buffer\topic_buffer $topic_buffer,
 		\senky\api\graphql\buffer\user_buffer $user_buffer,
 		\senky\api\graphql\buffer\user_group_buffer $user_group_buffer,
@@ -43,6 +44,7 @@ class context
 		$this->icon_buffer = $icon_buffer;
 		$this->group_buffer = $group_buffer;
 		$this->post_buffer = $post_buffer;
+		$this->smilie_buffer = $smilie_buffer;
 		$this->topic_buffer = $topic_buffer;
 		$this->user_buffer = $user_buffer;
 		$this->user_group_buffer = $user_group_buffer;

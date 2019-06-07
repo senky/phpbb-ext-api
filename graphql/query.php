@@ -49,7 +49,7 @@ class query extends ObjectType
 					],
 				],
 
-				// icon types
+				// icon type
 				'icons'	=> [
 					'type'	=> types::listOf(types::icon()),
 					'args'	=> [
@@ -69,6 +69,14 @@ class query extends ObjectType
 					'args'	=> [
 						'post_ids'	=> types::listOf(types::id()),
 						'topic_id'	=> types::id(),
+					],
+				],
+
+				// smiley type
+				'smilies'	=> [
+					'type'	=> types::listOf(types::smilie()),
+					'args'	=> [
+						'smilie_ids'	=> types::listOf(types::id()),
 					],
 				],
 
