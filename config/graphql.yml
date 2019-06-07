@@ -28,11 +28,10 @@ services:
     senky.api.graphql.mutation:
         class: senky\api\graphql\mutation
         arguments:
-            - '@user'
-            - '@config'
-            - '%core.root_path%'
-            - '%core.php_ext%'
+            - '@senky.api.graphql.mutator.topic'
 
+
+    # ------------ BUFFERS ------------
     senky.api.graphql.buffer.forum_buffer:
         class: senky\api\graphql\buffer\forum_buffer
         arguments:
@@ -103,3 +102,19 @@ services:
             - '@dbal.conn'
             - '@auth'
             - '%tables.user_group%'
+
+
+    # ------------ MUTATORS ------------
+    senky.api.graphql.mutator.base:
+        class: senky\api\graphql\mutator\base
+        abstract: true
+        arguments:
+            - '@dbal.conn'
+            - '@config'
+            - '@user'
+            - '%core.root_path%'
+            - '%core.php_ext%'
+
+    senky.api.graphql.mutator.topic:
+        class: senky\api\graphql\mutator\topic
+        parent: senky.api.graphql.mutator.base

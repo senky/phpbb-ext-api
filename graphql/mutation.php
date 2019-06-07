@@ -16,7 +16,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 
 class mutation extends type\type
 {
-	public function __construct(\phpbb\user $user, \phpbb\config\config $config, $root_path, $php_ext)
+	public function __construct(\senky\api\graphql\mutator\topic $topic_mutator)
 	{
 		$config = [
 			'name'		=> 'Mutation',
@@ -28,42 +28,21 @@ class mutation extends type\type
 						'subject'	=> types::nonNull(types::string()),
 						'message'	=> types::nonNull(types::string()),
 					],
-					'resolve'	=> function($row, $args, $context, ResolveInfo $info) use ($user, $config, $root_path, $php_ext) {
-						if (!class_exists('parse_message'))
+					'resolve'	=> function($row, $args, $context, ResolveInfo $info) use ($topic_mutator) {
+						try
 						{
-							include($root_path . 'includes/message_parser.' . $php_ext);
+							$args['topic_id'] = $topic_mutator->create($args);
 						}
-						if (!function_exists('submit_post'))
+						catch (\Exception $e)
 						{
-							include($root_path . 'includes/functions_posting.' . $php_ext);
+							return [
+								'errors'	=> [
+									$e->getMessage(),
+								],
+							];
 						}
-
-						$message_parser = new \parse_message();
-						$message_parser->message = $args['message'];
-						$message_parser->parse(true, $config['allow_post_links'], true, true, false, true, $config['allow_post_links']);
-
-						$poll_ary = [];
-						$data_ary = [
-							'topic_title'		=> $args['subject'],
-							'forum_id'			=> $args['forum_id'],
-							'icon_id'			=> 0,
-							'enable_bbcode'		=> true,
-							'enable_smilies'	=> true,
-							'enable_urls'		=> true,
-							'enable_sig'		=> true,
-							'message'			=> $message_parser->message,
-							'message_md5'		=> md5($message_parser->message),
-							'bbcode_bitfield'	=> $message_parser->bbcode_bitfield,
-							'bbcode_uid'		=> $message_parser->bbcode_uid,
-							'post_edit_locked'	=> false,
-							'enable_indexing'	=> true,
-							'notify'			=> false,
-							'notify_set'		=> false,
-						];
-						$redirect_url = \submit_post('post', $args['subject'], $user->data['username'], 0, $poll_ary, $data_ary);
 
 						$info->fieldName = 'topic';
-						$args['topic_id'] =  $this->extract_topic_id($redirect_url);
 						return $context->resolver->resolve($row, $args, $context, $info);
 					},
 				],
@@ -72,9 +51,5 @@ class mutation extends type\type
 		parent::__construct($config);
 	}
 
-	protected function extract_topic_id($redirect_url)
-	{
-		preg_match('/;t=(\d+)/', $redirect_url, $matches);
-		return $matches[1];
-	}
+	
 }
