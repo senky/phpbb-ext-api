@@ -12,23 +12,20 @@ namespace senky\api\graphql\type;
 
 use senky\api\graphql\type\types;
 
-class smilie_type extends type
+class rank_type extends type
 {
 	public function __construct()
 	{
 		$this->definition = [
-			'name'			=> 'Smiley',
+			'name'			=> 'Rank',
 			'needs_buffer'	=> true,
 			'fields'		=> function() {
 				return [
-					'smiley_id'				=> types::id(),
-					'code'					=> types::string(),
-					'emotion'				=> types::string(),
-					'smiley_url'			=> types::string(),
-					'smiley_width'			=> types::int(),
-					'smiley_height'			=> types::int(),
-					'smiley_order'			=> types::int(),
-					'display_on_posting'	=> types::boolean(),
+					'rank_id'		=> types::id(),
+					'rank_title'	=> types::string(),
+					'rank_min'		=> types::int(),
+					'rank_special'	=> types::boolean(),
+					'rank_image'	=> types::string(),
 				];
 			}
 		];

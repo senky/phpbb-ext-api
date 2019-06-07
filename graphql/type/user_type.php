@@ -52,7 +52,7 @@ class user_type extends type
 					'user_timezone'				=> types::string(),
 					'user_dateformat'			=> types::string(),
 					'user_style'				=> types::int(),
-					'user_rank'					=> types::int(),
+					'user_rank'					=> types::id(),
 					'user_colour'				=> types::string(),
 					'user_new_privmsg'			=> types::int(),
 					'user_unread_privmsg'		=> types::int(),
@@ -103,8 +103,15 @@ class user_type extends type
 							});
 							
 						},
-						
 					],
+					'rank'	=> [
+						'needs_translation'	=> true,
+						'type'				=> types::rank(),
+						'resolve'			=> function($row, $args, $context, ResolveInfo $info) {
+							$row['rank_id'] = $row['user_rank'];
+							return $context->resolver->resolve($row, $args, $context, $info);
+						},
+					]
 				];
 			}
 		];

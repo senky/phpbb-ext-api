@@ -11,7 +11,6 @@
 namespace senky\api\graphql\type;
 
 use senky\api\graphql\type\types;
-use GraphQL\Type\Definition\ResolveInfo;
 
 class icon_type extends type
 {

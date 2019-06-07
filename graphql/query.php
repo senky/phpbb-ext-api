@@ -72,6 +72,14 @@ class query extends ObjectType
 					],
 				],
 
+				// rank type
+				'ranks'	=> [
+					'type'	=> types::listOf(types::rank()),
+					'args'	=> [
+						'rank_ids'	=> types::listOf(types::id()),
+					],
+				],
+
 				// smiley type
 				'smilies'	=> [
 					'type'	=> types::listOf(types::smilie()),
