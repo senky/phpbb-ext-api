@@ -99,7 +99,8 @@ abstract class buffer
 				$sql .= ' WHERE ' . implode(' AND ', $where);
 			}
 
-			$result = $this->db->sql_query_limit($sql, $this->config[$this->get_limit_setting()], $start, );
+			$limit = $this->get_limit_setting() ? $this->config[$this->get_limit_setting()] : 0;
+			$result = $this->db->sql_query_limit($sql, $limit, $start);
 			while ($row = $this->db->sql_fetchrow($result))
 			{
 				$row = $this->auth_check($row);

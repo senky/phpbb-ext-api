@@ -28,6 +28,7 @@ class context
 		\senky\api\graphql\resolver $resolver,
 		\senky\api\graphql\buffer\forum_buffer $forum_buffer,
 		\senky\api\graphql\buffer\group_buffer $group_buffer,
+		\senky\api\graphql\buffer\icon_buffer $icon_buffer,
 		\senky\api\graphql\buffer\post_buffer $post_buffer,
 		\senky\api\graphql\buffer\topic_buffer $topic_buffer,
 		\senky\api\graphql\buffer\user_buffer $user_buffer,
@@ -39,6 +40,7 @@ class context
 		$this->config = $config;
 		$this->resolver = $resolver;
 		$this->forum_buffer = $forum_buffer;
+		$this->icon_buffer = $icon_buffer;
 		$this->group_buffer = $group_buffer;
 		$this->post_buffer = $post_buffer;
 		$this->topic_buffer = $topic_buffer;

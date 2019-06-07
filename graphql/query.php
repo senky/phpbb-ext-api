@@ -49,6 +49,14 @@ class query extends ObjectType
 					],
 				],
 
+				// icon types
+				'icons'	=> [
+					'type'	=> types::listOf(types::icon()),
+					'args'	=> [
+						'icon_ids'	=> types::listOf(types::id()),
+					],
+				],
+
 				// post types
 				'post'	=> [
 					'type'	=> types::post(),
