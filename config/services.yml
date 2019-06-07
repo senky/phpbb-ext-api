@@ -8,6 +8,7 @@ services:
             - '@request'
             - '@senky.api.graphql.context'
             - '@senky.api.graphql.query'
+            - '@senky.api.graphql.mutation'
 
     senky.api.listener:
         class: senky\api\event\main_listener
