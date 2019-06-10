@@ -16,7 +16,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 
 class query extends ObjectType
 {
-	public function __construct(\senky\api\graphql\resolver $resolver, \phpbb\user $user)
+	public function __construct(\senky\api\graphql\resolver $resolver, $container)
 	{
 		$config = [
 			'name'		=> 'Query',
@@ -80,6 +80,34 @@ class query extends ObjectType
 					],
 				],
 
+				// search type
+				'search'	=> [
+					'type'	=> types::listOf(types::post()),
+					'args'	=> [
+						'keywords'	=> types::string(),
+					],
+					// search is resolved in a very special way
+					'resolve'	=> function($row, $args, $context, ResolveInfo $info) use ($container) {
+						$search_type = $container->get('config')['search_type'];
+						$error = false;
+						$search = new $search_type($error, $container->getParameter('core.root_path'), $container->getParameter('core.php_ext'), $container->get('auth'), $container->get('config'), $container->get('dbal.conn'), $container->get('user'), $container->get('dispatcher'));
+
+						$search->split_keywords($args['keywords'], 'all');
+						if ($search->get_search_query())
+						{
+							$id_ary = [];
+							$start = 0;
+							$search->keyword_search('posts', 'all', 'all', ['t' => 'p.post_time'], 't', 'd', 0, [], $container->get('content.visibility')->get_global_visibility_sql('post', [], 'p.'), 0, [], '', $id_ary, $start, $container->get('config')['posts_per_page']);
+
+							// we always resolve to only one type
+							$info->fieldName = 'posts';
+							$row['post_ids'] = $id_ary;
+							return $context->resolver->resolve($row, $args, $context, $info);
+						}
+						return [];
+					}
+				],
+
 				// smiley type
 				'smilies'	=> [
 					'type'	=> types::listOf(types::smilie()),
@@ -109,7 +137,7 @@ class query extends ObjectType
 					'args'	=> [
 						'user_id'	=> [
 							'type'			=> types::id(),
-							'defaultValue'	=> (int) $user->data['user_id'],
+							'defaultValue'	=> (int) $container->get('user')->data['user_id'],
 						],
 					],
 				],

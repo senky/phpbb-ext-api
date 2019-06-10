@@ -23,7 +23,7 @@ services:
         class: senky\api\graphql\query
         arguments:
             - '@senky.api.graphql.resolver'
-            - '@user'
+            - '@service_container'
 
     senky.api.graphql.mutation:
         class: senky\api\graphql\mutation
