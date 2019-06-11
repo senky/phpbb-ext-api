@@ -28,28 +28,10 @@ class mutation extends type\type
 						'subject'	=> types::nonNull(types::string()),
 						'message'	=> types::nonNull(types::string()),
 					],
-					'resolve'	=> function($row, $args, $context, ResolveInfo $info) use ($topic_mutator) {
-						try
-						{
-							$args['topic_id'] = $topic_mutator->create($args);
-						}
-						catch (\Exception $e)
-						{
-							return [
-								'errors'	=> [
-									$e->getMessage(),
-								],
-							];
-						}
-
-						$info->fieldName = 'topic';
-						return $context->buffer_resolver->resolve($row, $args, $context, $info);
-					},
+					'resolve'	=> [$topic_mutator, 'create'],
 				],
 			],
 		];
 		parent::__construct($config);
 	}
-
-	
 }

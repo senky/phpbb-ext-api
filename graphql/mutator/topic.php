@@ -10,9 +10,11 @@
 
 namespace senky\api\graphql\mutator;
 
+use GraphQL\Type\Definition\ResolveInfo;
+
 class topic extends base
 {
-	public function create($args)
+	public function create($row, $args, $context, ResolveInfo $info)
 	{
 		if (!class_exists('parse_message'))
 		{
@@ -47,7 +49,9 @@ class topic extends base
 		];
 		$redirect_url = \submit_post('post', $args['subject'], $this->user->data['username'], 0, $poll_ary, $data_ary);
 
-		return $this->extract_topic_id($redirect_url);
+		$args['topic_id'] = $this->extract_topic_id($redirect_url);
+		$info->fieldName = 'topic';
+		return $context->buffer_resolver->resolve($row, $args, $context, $info);
 	}
 
 	protected function extract_topic_id($redirect_url)
