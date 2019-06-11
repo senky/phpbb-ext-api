@@ -25,8 +25,8 @@ services:
     senky.api.graphql.mutation:
         class: senky\api\graphql\mutation
         arguments:
-            - '@senky.api.graphql.mutator.login'
             - '@senky.api.graphql.mutator.topic'
+            - '@senky.api.graphql.mutator.user'
 
 
     # ------------ RESOLVERS ------------
@@ -138,10 +138,10 @@ services:
             - '%core.root_path%'
             - '%core.php_ext%'
 
-    senky.api.graphql.mutator.login:
-        class: senky\api\graphql\mutator\login
-        parent: senky.api.graphql.mutator.base
-
     senky.api.graphql.mutator.topic:
         class: senky\api\graphql\mutator\topic
+        parent: senky.api.graphql.mutator.base
+
+    senky.api.graphql.mutator.user:
+        class: senky\api\graphql\mutator\user
         parent: senky.api.graphql.mutator.base

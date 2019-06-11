@@ -12,10 +12,15 @@ namespace senky\api\graphql\mutator;
 
 use GraphQL\Type\Definition\ResolveInfo;
 
-class login extends base
+class user extends base
 {
-	public function login($row, $args, $context, ResolveInfo $info)
+	public function login($row, $args)
 	{
 		return $this->auth->login($args['username'], $args['password']);
+	}
+
+	public function logout()
+	{
+		return $this->user->session_kill();
 	}
 }
