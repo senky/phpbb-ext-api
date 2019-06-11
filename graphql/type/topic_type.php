@@ -76,6 +76,7 @@ class topic_type extends type
 					],
 					'first_post'	=> [
 						'type'		=> types::post(),
+						'requires_fields'	=> ['topic_first_post_id'],
 						'resolve'	=> function($row, $args, $context, ResolveInfo $info) {
 							$info->fieldName = 'post';
 							$row['post_id'] = $row['topic_first_post_id'];
@@ -84,6 +85,7 @@ class topic_type extends type
 					],
 					'last_post'	=> [
 						'type'		=> types::post(),
+						'requires_fields'	=> ['topic_last_post_id'],
 						'resolve'	=> function($row, $args, $context, ResolveInfo $info) {
 							$info->fieldName = 'post';
 							$row['post_id'] = $row['topic_last_post_id'];

@@ -71,6 +71,7 @@ class forum_type extends type
 					// additional fields
 					'parent'	=> [
 						'type'				=> types::forum(),
+						'requires_fields'	=> ['parent_id'],
 						'resolve'			=> function($row, $args, $context, ResolveInfo $info) {
 							$info->fieldName = 'forum';
 							$row['forum_id'] = $row['parent_id'];
@@ -79,6 +80,7 @@ class forum_type extends type
 					],
 					'last_post'	=> [
 						'type'				=> types::post(),
+						'requires_fields'	=> ['forum_last_post_id'],
 						'resolve'			=> function($row, $args, $context, ResolveInfo $info) {
 							$info->fieldName = 'post';
 							$row['post_id'] = $row['forum_last_post_id'];
