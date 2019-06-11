@@ -17,6 +17,7 @@ abstract class base
 		\phpbb\db\driver\driver_interface $db,
 		\phpbb\config\config $config,
 		\phpbb\user $user,
+		\phpbb\auth\auth $auth,
 		$root_path,
 		$php_ext
 	)
@@ -24,6 +25,7 @@ abstract class base
 		$this->db = $db;
 		$this->config = $config;
 		$this->user = $user;
+		$this->auth = $auth;
 		$this->root_path = $root_path;
 		$this->php_ext = $php_ext;
 	}

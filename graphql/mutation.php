@@ -16,11 +16,24 @@ use GraphQL\Type\Definition\ResolveInfo;
 
 class mutation extends type\type
 {
-	public function __construct(\senky\api\graphql\mutator\topic $topic_mutator)
+	public function __construct(
+		\senky\api\graphql\mutator\login $login_mutator,
+		\senky\api\graphql\mutator\topic $topic_mutator
+	)
 	{
 		$config = [
 			'name'		=> 'Mutation',
 			'fields'	=> [
+				// login type
+				'login' => [
+					'type'	=> types::login_result(),
+					'args'	=> [
+						'username'	=> types::string(),
+						'password'	=> types::string(),
+					],
+					'resolve'	=> [$login_mutator, 'login'],
+				],
+				// topic type
 				'createTopic'	=> [
 					'type'	=> types::topic(),
 					'args'	=> [
