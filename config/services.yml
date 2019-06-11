@@ -2,8 +2,8 @@ imports:
     - { resource: graphql.yml }
 
 services:
-    senky.api.controller.main:
-        class: senky\api\controller\main_controller
+    senky.api.controller.graphql:
+        class: senky\api\controller\graphql
         arguments:
             - '@request'
             - '@dbal.conn'
@@ -12,3 +12,16 @@ services:
             - '@senky.api.graphql.context'
             - '@senky.api.graphql.query'
             - '@senky.api.graphql.mutation'
+
+    senky.api.controller.textformatter:
+        class: senky\api\controller\textformatter
+        arguments:
+            - '@cache.driver'
+            - '@text_formatter.cache'
+
+    senky.api.event.textformatter:
+        class: senky\api\event\textformatter
+        arguments:
+            - '@cache.driver'
+        tags:
+            - { name: event.listener }

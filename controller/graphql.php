@@ -14,7 +14,7 @@ use GraphQL\Type\Schema;
 use GraphQL\Error\Debug;
 use GraphQL\Server\StandardServer;
 
-class main_controller
+class graphql
 {
 	protected $request;
 	protected $db;
