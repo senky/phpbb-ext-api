@@ -79,8 +79,6 @@ class user_type extends type
 					'user_avatar_width'			=> types::int(),
 					'user_avatar_height'		=> types::int(),
 					'user_sig'					=> types::string(),
-					'user_sig_bbcode_uid'		=> types::string(),
-					'user_sig_bbcode_bitfield'	=> types::string(),
 					'user_jabber'				=> types::string(),
 					'user_actkey'				=> types::string(),
 					'user_newpasswd'			=> types::string(),

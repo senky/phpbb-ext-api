@@ -39,8 +39,6 @@ class post_type extends type
 					'post_text'				=> types::string(),
 					'post_checksum'			=> types::string(),
 					'post_attachment'		=> types::boolean(),
-					'bbcode_bitfield'		=> types::string(),
-					'bbcode_uid'			=> types::string(),
 					'post_postcount'		=> types::boolean(),
 					'post_edit_time'		=> types::int(),
 					'post_edit_reason'		=> types::string(),
