@@ -60,14 +60,14 @@ class graphql
 			if (isset($GLOBALS['starttime']))
 			{
 				$totaltime = microtime(true) - $GLOBALS['starttime'];
-				$result->data['debug']['time'] = [
+				$result->extensions['debug']['time'] = [
 					'sql'	=> $this->db->get_sql_time(),
 					'php'	=> $totaltime - $this->db->get_sql_time(),
 					'total'	=> $totaltime,
 				];
 			}
 
-			$result->data['debug']['queries'] = [
+			$result->extensions['debug']['queries'] = [
 				'cached'	=> $this->db->sql_num_queries(true),
 				'total'		=> $this->db->sql_num_queries(),
 			];
@@ -75,17 +75,17 @@ class graphql
 			$memory_usage = memory_get_peak_usage();
 			if ($memory_usage)
 			{
-				$result->data['debug']['peak_memory_usage'] = $memory_usage;
+				$result->extensions['debug']['peak_memory_usage'] = $memory_usage;
 			}
 		}
 
 		if (defined('DEBUG'))
 		{
-			$result->data['debug']['gzip'] = $this->config['gzip_compress'] && @extension_loaded('zlib');
+			$result->extensions['debug']['gzip'] = $this->config['gzip_compress'] && @extension_loaded('zlib');
 
 			if ($this->user->load)
 			{
-				$result->data['debug']['load'] = $this->user->load;
+				$result->extensions['debug']['load'] = $this->user->load;
 			}
 		}
 
