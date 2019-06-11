@@ -1,7 +1,12 @@
 senky_api_graphql:
     path: /api/v0
-    defaults: { _controller: senky.api.controller.main:handle }
+    defaults: { _controller: senky.api.controller.graphql:handle }
     methods: POST
+
+senky_api_schema:
+    path: /api/v0/schema
+    defaults: { _controller: senky.api.controller.schema:handle }
+    methods: GET
 
 senky_api_preview:
     path: /textformatter.js
