@@ -4,6 +4,7 @@ services:
         arguments:
             - '@dbal.conn'
             - '@config'
+            - '@user'
             - '@senky.api.graphql.resolver.buffer'
             - '@senky.api.graphql.buffer.forum_buffer'
             - '@senky.api.graphql.buffer.group_buffer'
@@ -50,6 +51,7 @@ services:
             - '@dbal.conn'
             - '@auth'
             - '@config'
+            - '@user'
             - '%tables.forums%'
 
     senky.api.graphql.buffer.group_buffer:
@@ -58,6 +60,7 @@ services:
             - '@dbal.conn'
             - '@auth'
             - '@config'
+            - '@user'
             - '%tables.groups%'
 
     senky.api.graphql.buffer.icon_buffer:
@@ -66,6 +69,7 @@ services:
             - '@dbal.conn'
             - '@auth'
             - '@config'
+            - '@user'
             - '%tables.icons%'
 
     senky.api.graphql.buffer.post_buffer:
@@ -74,6 +78,7 @@ services:
             - '@dbal.conn'
             - '@auth'
             - '@config'
+            - '@user'
             - '%tables.posts%'
 
     senky.api.graphql.buffer.rank_buffer:
@@ -82,6 +87,7 @@ services:
             - '@dbal.conn'
             - '@auth'
             - '@config'
+            - '@user'
             - '%tables.ranks%'
 
     senky.api.graphql.buffer.smilie_buffer:
@@ -90,6 +96,7 @@ services:
             - '@dbal.conn'
             - '@auth'
             - '@config'
+            - '@user'
             - '%tables.smilies%'
 
     senky.api.graphql.buffer.topic_buffer:
@@ -98,6 +105,7 @@ services:
             - '@dbal.conn'
             - '@auth'
             - '@config'
+            - '@user'
             - '%tables.topics%'
 
     senky.api.graphql.buffer.user_buffer:
@@ -106,6 +114,7 @@ services:
             - '@dbal.conn'
             - '@auth'
             - '@config'
+            - '@user'
             - '%tables.users%'
 
     senky.api.graphql.buffer.user_group_buffer:

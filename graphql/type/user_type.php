@@ -108,7 +108,13 @@ class user_type extends type
 							$row['rank_id'] = $row['user_rank'];
 							return $context->buffer_resolver->resolve($row, $args, $context, $info);
 						},
-					]
+					],
+					'sid'	=> [
+						'type'		=> types::string(),
+						'resolve'	=> function($_, $__, $context) {
+							return $context->user->session_id;
+						}
+					],
 				];
 			}
 		];

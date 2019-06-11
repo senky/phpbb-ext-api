@@ -14,6 +14,7 @@ class context
 {
 	public $db;
 	public $config;
+	public $user;
 	public $resolver;
 	public $forum_buffer;
 	public $group_buffer;
@@ -25,6 +26,7 @@ class context
 	public function __construct(
 		\phpbb\db\driver\driver_interface $db,
 		\phpbb\config\config $config,
+		\phpbb\user $user,
 		\senky\api\graphql\resolver\buffer $buffer_resolver,
 		\senky\api\graphql\buffer\forum_buffer $forum_buffer,
 		\senky\api\graphql\buffer\group_buffer $group_buffer,
@@ -40,6 +42,7 @@ class context
 	{
 		$this->db = $db;
 		$this->config = $config;
+		$this->user = $user;
 		$this->buffer_resolver = $buffer_resolver;
 		$this->forum_buffer = $forum_buffer;
 		$this->icon_buffer = $icon_buffer;
