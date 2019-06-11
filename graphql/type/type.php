@@ -28,11 +28,11 @@ class type extends ObjectType
 	{
 		$fields = $this->get_fields();
 		$additional_fields = [];
-		foreach ($requested_fields as $field)
+		foreach ($requested_fields as $field => $_)
 		{
 			if (gettype($fields[$field]) === 'array' && !empty($fields[$field]['requires_fields']))
 			{
-				$additional_fields += $fields[$field]['requires_fields'];
+				$additional_fields += array_flip($fields[$field]['requires_fields']);
 			}
 		}
 		return $additional_fields;

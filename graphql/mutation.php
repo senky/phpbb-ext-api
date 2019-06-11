@@ -43,7 +43,7 @@ class mutation extends type\type
 						}
 
 						$info->fieldName = 'topic';
-						return $context->resolver->resolve($row, $args, $context, $info);
+						return $context->buffer_resolver->resolve($row, $args, $context, $info);
 					},
 				],
 			],

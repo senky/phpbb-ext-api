@@ -78,7 +78,7 @@ class forum_type extends type
 						'resolve'			=> function($row, $args, $context, ResolveInfo $info) {
 							$info->fieldName = 'forum';
 							$row['forum_id'] = $row['parent_id'];
-							return $context->resolver->resolve($row, $args, $context, $info);
+							return $context->buffer_resolver->resolve($row, $args, $context, $info);
 						},
 					],
 					'last_post'	=> [
@@ -86,13 +86,13 @@ class forum_type extends type
 						'resolve'			=> function($row, $args, $context, ResolveInfo $info) {
 							$info->fieldName = 'post';
 							$row['post_id'] = $row['forum_last_post_id'];
-							return $context->resolver->resolve($row, $args, $context, $info);
+							return $context->buffer_resolver->resolve($row, $args, $context, $info);
 						},
 					],
 					'topics'	=> [
 						'type'		=> types::listOf(types::topic()),
 						'resolve'	=> function($row, $args, $context, ResolveInfo $info) {
-							return $context->resolver->resolve($row, $args, $context, $info);
+							return $context->buffer_resolver->resolve($row, $args, $context, $info);
 						},
 					]
 				];

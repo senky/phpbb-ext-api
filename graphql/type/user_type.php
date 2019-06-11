@@ -98,7 +98,7 @@ class user_type extends type
 							return new \GraphQL\Deferred(function() use ($row, $args, $context, $info) {
 								$row['group_ids'] = $context->user_group_buffer->get($row['user_id'], 'group_id');
 	
-								return $context->resolver->resolve($row, $args, $context, $info);
+								return $context->buffer_resolver->resolve($row, $args, $context, $info);
 							});
 							
 						},
@@ -107,7 +107,7 @@ class user_type extends type
 						'type'				=> types::rank(),
 						'resolve'			=> function($row, $args, $context, ResolveInfo $info) {
 							$row['rank_id'] = $row['user_rank'];
-							return $context->resolver->resolve($row, $args, $context, $info);
+							return $context->buffer_resolver->resolve($row, $args, $context, $info);
 						},
 					]
 				];

@@ -64,13 +64,13 @@ class post_type extends type
 					'topic'	=> [
 						'type'				=> types::topic(),
 						'resolve'			=> function($row, $args, $context, ResolveInfo $info) {
-							return $context->resolver->resolve($row, $args, $context, $info);
+							return $context->buffer_resolver->resolve($row, $args, $context, $info);
 						},
 					],
 					'forum'	=> [
 						'type'				=> types::forum(),
 						'resolve'			=> function($row, $args, $context, ResolveInfo $info) {
-							return $context->resolver->resolve($row, $args, $context, $info);
+							return $context->buffer_resolver->resolve($row, $args, $context, $info);
 						},
 					],
 					'poster'	=> [
@@ -78,7 +78,7 @@ class post_type extends type
 						'resolve'			=> function($row, $args, $context, ResolveInfo $info) {
 							$info->fieldName = 'user';
 							$row['user_id'] = $row['poster_id'];
-							return $context->resolver->resolve($row, $args, $context, $info);
+							return $context->buffer_resolver->resolve($row, $args, $context, $info);
 						},
 					],
 				];

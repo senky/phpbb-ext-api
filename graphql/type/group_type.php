@@ -57,7 +57,7 @@ class group_type extends type
 									return [];
 								}
 
-								return $context->resolver->resolve($row, $args, $context, $info);
+								return $context->buffer_resolver->resolve($row, $args, $context, $info);
 							});
 							
 						},

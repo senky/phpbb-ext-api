@@ -55,7 +55,7 @@ class statistics_type extends type
 						'resolve'			=> function($row, $args, $context, ResolveInfo $info) {
 							$info->fieldName = 'user';
 							$args['user_id'] = $context->config['newest_user_id'];
-							return $context->resolver->resolve($row, $args, $context, $info);
+							return $context->buffer_resolver->resolve($row, $args, $context, $info);
 						},
 					],
 					'online_registered'	=> [

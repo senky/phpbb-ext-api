@@ -8,12 +8,12 @@
  *
  */
 
-namespace senky\api\graphql;
+namespace senky\api\graphql\resolver;
 
 use GraphQL\Type\Definition\ResolveInfo;
 use senky\api\graphql\type\type as phpbbType;
 
-class resolver
+class buffer
 {
 	public function resolve($row, $args, $context, ResolveInfo $info)
 	{
@@ -87,9 +87,9 @@ class resolver
 		$fields = $info->getFieldSelection();
 		if ($type instanceof phpbbType)
 		{
+			$fields += $type->get_required_fields($fields);
 			$fields = $type->clean_fields($fields);
 			$fields = array_keys($fields);
-			$fields += $type->get_required_fields($fields);
 		}
 
 		return $fields;

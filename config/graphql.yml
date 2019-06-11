@@ -4,7 +4,7 @@ services:
         arguments:
             - '@dbal.conn'
             - '@config'
-            - '@senky.api.graphql.resolver'
+            - '@senky.api.graphql.resolver.buffer'
             - '@senky.api.graphql.buffer.forum_buffer'
             - '@senky.api.graphql.buffer.group_buffer'
             - '@senky.api.graphql.buffer.icon_buffer'
@@ -16,13 +16,9 @@ services:
             - '@senky.api.graphql.buffer.user_group_buffer'
             - '%tables.forums%'
 
-    senky.api.graphql.resolver:
-        class: senky\api\graphql\resolver
-
     senky.api.graphql.query:
         class: senky\api\graphql\query
         arguments:
-            - '@senky.api.graphql.resolver'
             - '@service_container'
 
     senky.api.graphql.mutation:
@@ -30,6 +26,22 @@ services:
         arguments:
             - '@senky.api.graphql.mutator.topic'
 
+
+    # ------------ RESOLVERS ------------
+    senky.api.graphql.resolver.buffer:
+        class: senky\api\graphql\resolver\buffer
+
+    senky.api.graphql.resolver.search:
+        class: senky\api\graphql\resolver\search
+        arguments:
+            - '@config'
+            - '@auth'
+            - '@dbal.conn'
+            - '@user'
+            - '@dispatcher'
+            - '@content.visibility'
+            - '%core.root_path%'
+            - '%core.php_ext%'
 
     # ------------ BUFFERS ------------
     senky.api.graphql.buffer.forum_buffer:
