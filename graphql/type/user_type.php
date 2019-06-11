@@ -103,6 +103,7 @@ class user_type extends type
 					],
 					'rank'	=> [
 						'type'				=> types::rank(),
+						'requires_fields'	=> ['user_rank'],
 						'resolve'			=> function($row, $args, $context, ResolveInfo $info) {
 							$row['rank_id'] = $row['user_rank'];
 							return $context->buffer_resolver->resolve($row, $args, $context, $info);
