@@ -20,12 +20,14 @@ abstract class buffer
 	protected $db;
 	protected $auth;
 	protected $config;
+	protected $user;
 	protected $table;
-	public function __construct(\phpbb\db\driver\driver_interface $db, \phpbb\auth\auth $auth, \phpbb\config\config $config, $table)
+	public function __construct(\phpbb\db\driver\driver_interface $db, \phpbb\auth\auth $auth, \phpbb\config\config $config, \phpbb\user $user, $table)
 	{
 		$this->db = $db;
 		$this->auth = $auth;
 		$this->config = $config;
+		$this->user = $user;
 		$this->table = $table;
 	}
 
@@ -89,8 +91,14 @@ abstract class buffer
 		{
 			$where = [];
 			$fields = implode(',', $this->fields);
-			$sql = 'SELECT ' . $this->get_entity_fields() . ($fields ? ',' . $fields : '') . '
-				FROM ' . $this->table;
+			$sql_ary = [
+				'SELECT'	=> $this->get_entity_fields() . ($fields ? ',' . $fields : ''),
+				'FROM'		=> [$this->table => ''],
+				'LEFT_JOIN'	=> [],
+				'WHERE'		=> '',
+			];
+
+			$sql_ary = $this->get_sql_additions($sql_ary);
 			
 			if (!empty($this->entity_ids))
 			{
@@ -103,9 +111,10 @@ abstract class buffer
 
 			if (!empty($where))
 			{
-				$sql .= ' WHERE ' . implode(' AND ', $where);
+				$sql_ary['WHERE'] .= implode(' AND ', $where);
 			}
 
+			$sql = $this->db->sql_build_query('SELECT', $sql_ary);
 			$limit = $this->get_limit_setting() ? $this->config[$this->get_limit_setting()] : 0;
 			$result = $this->db->sql_query_limit($sql, $limit, $start);
 			while ($row = $this->db->sql_fetchrow($result))
@@ -127,6 +136,15 @@ abstract class buffer
 	protected function auth_check($row)
 	{
 		return $row;
+	}
+
+	public function additional_request($types)
+	{
+	}
+
+	protected function get_sql_additions($sql_ary)
+	{
+		return $sql_ary;
 	}
 
 	protected abstract function get_entity_name();

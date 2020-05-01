@@ -39,6 +39,27 @@ class type extends ObjectType
 	}
 
 	/**
+	 * Some additional fields need SQL adjustions.
+	 * This method sets the adjustions.
+	 *
+	 * @param [string] $fields Requested fields
+	 * @return [string] Additions
+	 */
+	public function get_additions($requested_fields)
+	{
+		$fields = $this->get_fields();
+		$additions = [];
+		foreach ($requested_fields as $field => $_)
+		{
+			if (gettype($fields[$field]) === 'array' && !empty($fields[$field]['needs_addition']))
+			{
+				$additions += $fields[$field]['needs_addition'];
+			}
+		}
+		return $additions;
+	}
+
+	/**
 	 * Cleans fields from additional fields (not present in DB).
 	 *
 	 * @param [string] $fields Requested fields

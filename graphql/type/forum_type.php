@@ -92,9 +92,16 @@ class forum_type extends type
 						'resolve'	=> function($row, $args, $context, ResolveInfo $info) {
 							return $context->buffer_resolver->resolve($row, $args, $context, $info);
 						},
-					]
+					],
+					'has_unread_posts'	=> [
+						'type'				=> types::boolean(),
+						'needs_addition'	=> ['unread_posts'],
+						'resolve'			=> function($row, $args, $context, ResolveInfo $info) {
+							return false;
+						},
+					],
 				];
-			}
+			},
 		];
 		parent::__construct($this->definition);
 	}

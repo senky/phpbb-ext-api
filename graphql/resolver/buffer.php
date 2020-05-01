@@ -39,7 +39,7 @@ class buffer
 
 	protected function resolve_single($type, $args, $context, ResolveInfo $info)
 	{
-		$fields = $this->get_fields($info);
+		$fields = $this->get_fields($info, $context->{$type . '_buffer'});
 
 		$context->{$type . '_buffer'}->add($args[$type . '_id'], $fields);
 
@@ -50,7 +50,7 @@ class buffer
 
 	protected function resolve_multiple($type, $args, $context, ResolveInfo $info)
 	{
-		$fields = $this->get_fields($info);
+		$fields = $this->get_fields($info, $context->{$type . '_buffer'});
 
 		$context->{$type . '_buffer'}->add_fields($fields);
 
@@ -80,7 +80,7 @@ class buffer
 		});
 	}
 
-	protected function get_fields(ResolveInfo $info)
+	protected function get_fields(ResolveInfo $info, $buffer)
 	{
 		$type = $this->get_scalar_type($info->returnType);
 
@@ -88,6 +88,10 @@ class buffer
 		if ($type instanceof phpbbType)
 		{
 			$fields += $type->get_required_fields($fields);
+
+			$additions = $type->get_additions($fields);
+			$buffer->additional_request($additions);
+
 			$fields = $type->clean_fields($fields);
 			$fields = array_keys($fields);
 		}
